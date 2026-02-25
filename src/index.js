@@ -1,4 +1,4 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize"], (result) => {
   const greetingEl = document.getElementById("greeting");
 
   // greeting
@@ -22,6 +22,11 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
     // apply text color
     if (result.messageTextColor) {
       greetingEl.style.color = result.messageTextColor;
+    }
+
+    // apply text size
+    if (result.messageTextSize) {
+      greetingEl.style.fontSize = `${result.messageTextSize}rem`;
     }
 
     if (result.titleEffect === "typewriter") {

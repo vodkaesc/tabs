@@ -14,6 +14,7 @@ const messageFontBtns = document.querySelectorAll("#message-font-group .option-b
 const customFontSection = document.getElementById("custom-font-section");
 const messageFontInput = document.getElementById("message-font");
 const messageColorInput = document.getElementById("message-color");
+const messageSizeInput = document.getElementById("message-size");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
@@ -81,6 +82,7 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
   dynamicTitleToggle.checked = result.dynamicTitle || false;
   messageEnabledToggle.checked = result.messageEnabled !== false;
   if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
+  if (result.messageTextSize) messageSizeInput.value = result.messageTextSize;
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => {
@@ -123,6 +125,7 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     messageFontType: selectedMessageFont,
     messageFontFamily: messageFontInput.value,
     messageTextColor: messageColorInput.value,
+    messageTextSize: messageSizeInput.value,
   }, () => {
     if (faviconBase64) {
       chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));
