@@ -64,6 +64,12 @@
       color: #fff;
     }
 
+    .setting-hint {
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 4px;
+    }
+
     .input-wrapper {
       display: flex;
       align-items: center;
@@ -88,6 +94,55 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.85rem;
       width: 100%;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #333;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      top: 3px;
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle input:checked + .slider {
+      background: #4ade80;
+    }
+
+    .toggle input:checked + .slider::before {
+      transform: translateX(20px);
     }
 
     .save-bar {
@@ -118,37 +173,38 @@
       font-weight: 700;
     }
 
-
     #toast {
-  position: fixed;
-  top: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e1e1e;
-  border: 1px solid #4ade80;
-  color: #4ade80;
-  padding: 10px 20px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
+      position: fixed;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1e1e1e;
+      border: 1px solid #4ade80;
+      color: #4ade80;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
 
-#toast.show {
-  opacity: 1;
-}
+    #toast.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-<div id="toast"></div>
+
+  <div id="toast"></div>
+
   <div class="header">
     <h1>tabs<span>/tune</span></h1>
   </div>
 
+  <!-- user -->
   <div class="section">
     <div class="section-title">user</div>
-
     <p class="setting-label">user.name</p>
     <div class="input-wrapper">
       <span class="input-prefix">&gt;</span>
@@ -156,22 +212,33 @@
     </div>
   </div>
 
-
+  <!-- title -->
   <div class="section">
-  <div class="section-title">title</div>
+    <div class="section-title">title</div>
 
-  <p class="setting-label">title.defaultTitle</p>
-  <div class="input-wrapper">
-    <span class="input-prefix">&gt;</span>
-    <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
+    <p class="setting-label">title.defaultTitle</p>
+    <div class="input-wrapper">
+      <span class="input-prefix">&gt;</span>
+      <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
+    </div>
+
+    <div class="toggle-row">
+      <div>
+        <p class="setting-label">title.dynamic.enabled</p>
+        <p class="setting-hint">tab title changes to match what you type in the search bar</p>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="dynamic-title" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
   </div>
-</div>
 
   <div class="save-bar">
     <button class="btn btn-save">save</button>
   </div>
 
   <script src="tune.js"></script>
-
 </body>
 </html>

@@ -1,17 +1,18 @@
 const usernameInput = document.getElementById("username");
 const tabTitleInput = document.getElementById("tab-title");
+const dynamicTitleToggle = document.getElementById("dynamic-title");
 
-// load saved values when page opens
-chrome.storage.sync.get(["username", "tabTitle"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
+  dynamicTitleToggle.checked = result.dynamicTitle || false;
 });
 
-// save on button click
 document.querySelector(".btn-save").addEventListener("click", () => {
   chrome.storage.sync.set({
     username: usernameInput.value,
     tabTitle: tabTitleInput.value,
+    dynamicTitle: dynamicTitleToggle.checked,
   }, () => {
     showToast("changes saved");
   });
