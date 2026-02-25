@@ -1,391 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <title>Tune</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8" />
+    <title>Tune</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background: #111;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      min-height: 100vh;
-      padding: 48px 0 120px;
-    }
+        body {
+            background: #111;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            min-height: 100vh;
+            padding: 48px 0 120px;
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
 
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-    }
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
 
-    .header h1 span {
-      color: #4ade80;
-    }
+        .header h1 span {
+            color: #4ade80;
+        }
 
-    .section {
-      max-width: 640px;
-      margin: 0 auto 40px;
-      padding: 0 24px;
-    }
+        .section {
+            max-width: 640px;
+            margin: 0 auto 40px;
+            padding: 0 24px;
+        }
 
-    .section-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: #888;
-      font-size: 0.8rem;
-      margin-bottom: 24px;
-    }
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 24px;
+        }
 
-    .section-title::before,
-    .section-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #333;
-    }
+        .section-title::before,
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #333;
+        }
 
-    .setting-label {
-      font-size: 0.85rem;
-      margin-bottom: 8px;
-      color: #fff;
-    }
+        .setting-label {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: #fff;
+        }
 
-    .setting-hint {
-      font-size: 0.75rem;
-      color: #666;
-      margin-top: 4px;
-    }
+        .setting-hint {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+        }
 
-    .input-wrapper {
-      display: flex;
-      align-items: center;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 6px;
-      padding: 10px 12px;
-      margin-bottom: 20px;
-      margin-top: 12px;
-    }
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            margin-top: 12px;
+        }
 
-    .input-prefix {
-      color: #4ade80;
-      margin-right: 10px;
-      font-size: 0.85rem;
-    }
+        .input-prefix {
+            color: #4ade80;
+            margin-right: 10px;
+            font-size: 0.85rem;
+        }
 
-    .setting-input {
-      background: none;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      width: 100%;
-    }
+        .setting-input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            width: 100%;
+        }
 
-    .toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-    .toggle {
-      position: relative;
-      width: 44px;
-      height: 24px;
-      flex-shrink: 0;
-    }
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            flex-shrink: 0;
+        }
 
-    .toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-    .slider {
-      position: absolute;
-      inset: 0;
-      background: #333;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #333;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
 
-    .slider::before {
-      content: '';
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      left: 3px;
-      top: 3px;
-      background: #fff;
-      border-radius: 50%;
-      transition: transform 0.2s;
-    }
+        .slider::before {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            left: 3px;
+            top: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
 
-    .toggle input:checked + .slider {
-      background: #4ade80;
-    }
+        .toggle input:checked+.slider {
+            background: #4ade80;
+        }
 
-    .toggle input:checked + .slider::before {
-      transform: translateX(20px);
-    }
+        .toggle input:checked+.slider::before {
+            transform: translateX(20px);
+        }
 
-    .btn-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
 
-    .option-btn {
-      padding: 10px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #fff;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
+        .option-btn {
+            padding: 10px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
 
-    .option-btn.active {
-      background: #4ade80;
-      border-color: #4ade80;
-      color: #111;
-    }
+        .option-btn.active {
+            background: #4ade80;
+            border-color: #4ade80;
+            color: #111;
+        }
 
-    .favicon-upload-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      margin-bottom: 12px;
-    }
+        .favicon-upload-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
 
-    .favicon-upload-btn {
-      background: #06b6d4;
-      color: #111;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      cursor: pointer;
-      white-space: nowrap;
-    }
+        .favicon-upload-btn {
+            background: #06b6d4;
+            color: #111;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
 
-    .favicon-upload-btn input {
-      display: none;
-    }
+        .favicon-upload-btn input {
+            display: none;
+        }
 
-    #favicon-filename {
-      font-size: 0.8rem;
-      color: #888;
-    }
+        #favicon-filename {
+            font-size: 0.8rem;
+            color: #888;
+        }
 
-    .favicon-reset-btn {
-      margin-left: auto;
-      background: #f43f5e;
-      color: #fff;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
+        .favicon-reset-btn {
+            margin-left: auto;
+            background: #f43f5e;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
 
-    .favicon-preview {
-      width: 48px;
-      height: 48px;
-      background: #1e1e1e;
-      border: 1px solid #333;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8px;
-      color: #555;
-      font-size: 1.2rem;
-    }
+        .favicon-preview {
+            width: 48px;
+            height: 48px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            color: #555;
+            font-size: 1.2rem;
+        }
 
-    .favicon-preview img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-    }
+        .favicon-preview img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
 
-    .save-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 16px 24px;
-      background: #111;
-      border-top: 1px solid #222;
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
+        .save-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px 24px;
+            background: #111;
+            border-top: 1px solid #222;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
 
-    .btn {
-      padding: 10px 32px;
-      border: none;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
+        .btn {
+            padding: 10px 32px;
+            border: none;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
 
-    .btn-save {
-      background: #4ade80;
-      color: #111;
-      font-weight: 700;
-    }
+        .btn-save {
+            background: #4ade80;
+            color: #111;
+            font-weight: 700;
+        }
 
-    #toast {
-      position: fixed;
-      top: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e1e1e;
-      border: 1px solid #4ade80;
-      color: #4ade80;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-    }
+        #toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e1e1e;
+            border: 1px solid #4ade80;
+            color: #4ade80;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
 
-    #toast.show {
-      opacity: 1;
-    }
-  </style>
+        #toast.show {
+            opacity: 1;
+        }
+    </style>
 </head>
+
 <body>
 
-  <div id="toast"></div>
+    <div id="toast"></div>
 
-  <div class="header">
-    <h1>tabs<span>/tune</span></h1>
-  </div>
-
-  <!-- user -->
-  <div class="section">
-    <div class="section-title">user</div>
-    <p class="setting-label">user.name</p>
-    <div class="input-wrapper">
-      <span class="input-prefix">&gt;</span>
-      <input type="text" id="username" class="setting-input" placeholder="your name" />
-    </div>
-  </div>
-
-  <!-- title -->
-  <div class="section">
-    <div class="section-title">title</div>
-
-    <p class="setting-label">title.defaultTitle</p>
-    <div class="input-wrapper">
-      <span class="input-prefix">&gt;</span>
-      <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
+    <div class="header">
+        <h1>tabs<span>/tune</span></h1>
     </div>
 
-    <div class="toggle-row">
-      <div>
-        <p class="setting-label">title.dynamic.enabled</p>
-        <p class="setting-hint">tab title changes to match what you type in the search bar</p>
-      </div>
-      <label class="toggle">
-        <input type="checkbox" id="dynamic-title" />
-        <span class="slider"></span>
-      </label>
+    <!-- user -->
+    <div class="section">
+        <div class="section-title">user</div>
+        <p class="setting-label">user.name</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="username" class="setting-input" placeholder="your name" />
+        </div>
     </div>
 
-    <p class="setting-label">title.effect</p>
-    <div class="btn-group" id="title-effect-group">
-      <button class="option-btn active" data-value="none">none</button>
-      <button class="option-btn" data-value="typewriter">typewriter</button>
+    <!-- title -->
+    <div class="section">
+        <div class="section-title">title</div>
+
+        <p class="setting-label">title.defaultTitle</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
+        </div>
+
+        <div class="toggle-row">
+            <div>
+                <p class="setting-label">title.dynamic.enabled</p>
+                <p class="setting-hint">tab title changes to match what you type in the search bar</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="dynamic-title" />
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <p class="setting-label">title.effect</p>
+        <div class="btn-group" id="title-effect-group">
+            <button class="option-btn active" data-value="none">none</button>
+            <button class="option-btn" data-value="typewriter">typewriter</button>
+        </div>
+
+        <p class="setting-label">title.faviconType</p>
+        <div class="btn-group" id="favicon-type-group">
+            <button class="option-btn active" data-value="default">default</button>
+            <button class="option-btn" data-value="custom">custom</button>
+        </div>
+
+        <div id="custom-favicon-section" style="display:none">
+            <p class="setting-label">title.customFavicon</p>
+            <p class="setting-hint">note: the customFavicon is not included when exporting configs due to size</p>
+            <div class="favicon-upload-row">
+                <label class="favicon-upload-btn">
+                    <input type="file" id="favicon-upload" accept="image/*" />
+                    Browse...
+                </label>
+                <span id="favicon-filename">No file selected.</span>
+                <button class="favicon-reset-btn" id="favicon-reset">reset</button>
+            </div>
+            <p class="setting-hint">live preview</p>
+            <div class="favicon-preview">
+                <img id="favicon-preview-img" src="" alt="" style="display:none" />
+                <div id="favicon-preview-empty">⊘</div>
+            </div>
+        </div>
+
     </div>
 
-    <p class="setting-label">title.faviconType</p>
-    <div class="btn-group" id="favicon-type-group">
-      <button class="option-btn active" data-value="default">default</button>
-      <button class="option-btn" data-value="custom">custom</button>
+    <!-- message -->
+    <div class="section">
+        <div class="section-title">message</div>
+
+        <div class="toggle-row">
+            <div>
+                <p class="setting-label">message.enabled</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="message-enabled" checked />
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <p class="setting-label">message.font.type</p>
+        <div class="btn-group" id="message-font-group">
+            <button class="option-btn active" data-value="default">default</button>
+            <button class="option-btn" data-value="custom">custom</button>
+        </div>
+
+        <div id="custom-font-section" style="display:none">
+            <p class="setting-label">message.font.family</p>
+            <p class="setting-hint">enter any Google Fonts font name e.g. "Roboto", "Playfair Display"</p>
+            <div class="input-wrapper">
+                <span class="input-prefix">&gt;</span>
+                <input type="text" id="message-font" class="setting-input" placeholder="Roboto" />
+            </div>
+        </div>
+
+        <p class="setting-label">message.textColor</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="message-color" class="setting-input" placeholder="#ffffff" />
+        </div>
+
     </div>
 
-    <div id="custom-favicon-section" style="display:none">
-      <p class="setting-label">title.customFavicon</p>
-      <p class="setting-hint">note: the customFavicon is not included when exporting configs due to size</p>
-      <div class="favicon-upload-row">
-        <label class="favicon-upload-btn">
-          <input type="file" id="favicon-upload" accept="image/*" />
-          Browse...
-        </label>
-        <span id="favicon-filename">No file selected.</span>
-        <button class="favicon-reset-btn" id="favicon-reset">reset</button>
-      </div>
-      <p class="setting-hint">live preview</p>
-      <div class="favicon-preview">
-        <img id="favicon-preview-img" src="" alt="" style="display:none" />
-        <div id="favicon-preview-empty">⊘</div>
-      </div>
+    <div class="save-bar">
+        <button class="btn btn-save">save</button>
     </div>
 
-  </div>
-
-  <!-- message -->
-  <div class="section">
-    <div class="section-title">message</div>
-
-    <div class="toggle-row">
-      <div>
-        <p class="setting-label">message.enabled</p>
-      </div>
-      <label class="toggle">
-        <input type="checkbox" id="message-enabled" checked />
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <p class="setting-label">message.font.type</p>
-    <div class="btn-group" id="message-font-group">
-      <button class="option-btn active" data-value="default">default</button>
-      <button class="option-btn" data-value="custom">custom</button>
-    </div>
-
-    <div id="custom-font-section" style="display:none">
-      <p class="setting-label">message.font.family</p>
-      <p class="setting-hint">enter any Google Fonts font name e.g. "Roboto", "Playfair Display"</p>
-      <div class="input-wrapper">
-        <span class="input-prefix">&gt;</span>
-        <input type="text" id="message-font" class="setting-input" placeholder="Roboto" />
-      </div>
-    </div>
-
-  </div>
-
-  <div class="save-bar">
-    <button class="btn btn-save">save</button>
-  </div>
-
-  <script src="tune.js"></script>
+    <script src="tune.js"></script>
 </body>
+
 </html>

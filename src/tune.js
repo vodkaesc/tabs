@@ -13,6 +13,7 @@ const messageEnabledToggle = document.getElementById("message-enabled");
 const messageFontBtns = document.querySelectorAll("#message-font-group .option-btn");
 const customFontSection = document.getElementById("custom-font-section");
 const messageFontInput = document.getElementById("message-font");
+const messageColorInput = document.getElementById("message-color");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
@@ -74,11 +75,12 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
   messageEnabledToggle.checked = result.messageEnabled !== false;
+  if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => {
@@ -120,6 +122,7 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     messageEnabled: messageEnabledToggle.checked,
     messageFontType: selectedMessageFont,
     messageFontFamily: messageFontInput.value,
+    messageTextColor: messageColorInput.value,
   }, () => {
     if (faviconBase64) {
       chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));

@@ -1,4 +1,4 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor"], (result) => {
   const greetingEl = document.getElementById("greeting");
 
   // greeting
@@ -17,6 +17,11 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
       link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(result.messageFontFamily)}&display=swap`;
       document.head.appendChild(link);
       greetingEl.style.fontFamily = `'${result.messageFontFamily}', sans-serif`;
+    }
+
+    // apply text color
+    if (result.messageTextColor) {
+      greetingEl.style.color = result.messageTextColor;
     }
 
     if (result.titleEffect === "typewriter") {
