@@ -145,6 +145,31 @@
       transform: translateX(20px);
     }
 
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      padding: 10px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .option-btn.active {
+      background: #4ade80;
+      border-color: #4ade80;
+      color: #111;
+    }
+
     .save-bar {
       position: fixed;
       bottom: 0;
@@ -231,6 +256,12 @@
         <input type="checkbox" id="dynamic-title" />
         <span class="slider"></span>
       </label>
+    </div>
+
+    <p class="setting-label">title.effect</p>
+    <div class="btn-group">
+      <button class="option-btn active" data-value="none">none</button>
+      <button class="option-btn" data-value="typewriter">typewriter</button>
     </div>
 
   </div>

@@ -1,28 +1,38 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle"], (result) => {
-  // greeting
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect"], (result) => {
   const name = result.username || "user";
   const hour = new Date().getHours();
   const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
-  document.getElementById("greeting").textContent = `Good ${time}, ${name}`;
+  const greeting = `Good ${time}, ${name}`;
+
+  const greetingEl = document.getElementById("greeting");
+
+  if (result.titleEffect === "typewriter") {
+    let i = 0;
+    const type = () => {
+      if (i < greeting.length) {
+        greetingEl.textContent += greeting[i];
+        i++;
+        setTimeout(type, 60);
+      }
+    };
+    type();
+  } else {
+    greetingEl.textContent = greeting;
+  }
 
   // tab title
   const defaultTitle = result.tabTitle || "tabs";
   document.title = defaultTitle;
 
-  // search bar
+  // dynamic title
   const searchInput = document.getElementById("search");
-
-  // on enter — perform search
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const query = searchInput.value.trim();
-      if (query) {
-        window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-      }
+      if (query) window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
     }
   });
 
-  // dynamic title
   if (result.dynamicTitle) {
     searchInput.addEventListener("input", () => {
       document.title = searchInput.value || defaultTitle;
