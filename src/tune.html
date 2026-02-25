@@ -170,6 +170,66 @@
       color: #111;
     }
 
+    .favicon-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+
+    .favicon-upload-btn {
+      background: #06b6d4;
+      color: #111;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .favicon-upload-btn input {
+      display: none;
+    }
+
+    #favicon-filename {
+      font-size: 0.8rem;
+      color: #888;
+    }
+
+    .favicon-reset-btn {
+      margin-left: auto;
+      background: #f43f5e;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .favicon-preview {
+      width: 48px;
+      height: 48px;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 8px;
+      color: #555;
+      font-size: 1.2rem;
+    }
+
+    .favicon-preview img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
     .save-bar {
       position: fixed;
       bottom: 0;
@@ -259,9 +319,33 @@
     </div>
 
     <p class="setting-label">title.effect</p>
-    <div class="btn-group">
+    <div class="btn-group" id="title-effect-group">
       <button class="option-btn active" data-value="none">none</button>
       <button class="option-btn" data-value="typewriter">typewriter</button>
+    </div>
+
+    <p class="setting-label">title.faviconType</p>
+    <div class="btn-group" id="favicon-type-group">
+      <button class="option-btn active" data-value="default">default</button>
+      <button class="option-btn" data-value="custom">custom</button>
+    </div>
+
+    <div id="custom-favicon-section" style="display:none">
+      <p class="setting-label">title.customFavicon</p>
+      <p class="setting-hint">note: the customFavicon is not included when exporting configs due to size</p>
+      <div class="favicon-upload-row">
+        <label class="favicon-upload-btn">
+          <input type="file" id="favicon-upload" accept="image/*" />
+          Browse...
+        </label>
+        <span id="favicon-filename">No file selected.</span>
+        <button class="favicon-reset-btn" id="favicon-reset">reset</button>
+      </div>
+      <p class="setting-hint">live preview</p>
+      <div class="favicon-preview">
+        <img id="favicon-preview-img" src="" alt="" style="display:none" />
+        <div id="favicon-preview-empty">⊘</div>
+      </div>
     </div>
 
   </div>

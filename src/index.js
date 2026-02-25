@@ -1,9 +1,9 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType"], (result) => {
+  // greeting
   const name = result.username || "user";
   const hour = new Date().getHours();
   const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
   const greeting = `Good ${time}, ${name}`;
-
   const greetingEl = document.getElementById("greeting");
 
   if (result.titleEffect === "typewriter") {
@@ -24,8 +24,18 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect"],
   const defaultTitle = result.tabTitle || "tabs";
   document.title = defaultTitle;
 
-  // dynamic title
+  // favicon
+  if (result.faviconType === "custom") {
+    chrome.storage.local.get(["faviconBase64"], (local) => {
+      if (local.faviconBase64) {
+        document.getElementById("favicon").href = local.faviconBase64;
+      }
+    });
+  }
+
+  // search
   const searchInput = document.getElementById("search");
+
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const query = searchInput.value.trim();
