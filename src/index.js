@@ -1,14 +1,10 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText"], (result) => {
   const greetingEl = document.getElementById("greeting");
 
   // greeting
   if (result.messageEnabled === false) {
     greetingEl.style.display = "none";
   } else {
-    const name = result.username || "user";
-    const hour = new Date().getHours();
-    const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
-    const greeting = `Good ${time}, ${name}`;
 
     // apply custom font
     if (result.messageFontType === "custom" && result.messageFontFamily) {
@@ -27,6 +23,27 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
     // apply text size
     if (result.messageTextSize) {
       greetingEl.style.fontSize = `${result.messageTextSize}rem`;
+    }
+
+    // build message based on type
+    const name = result.username || "user";
+    const now = new Date();
+    const hour = now.getHours();
+    const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+    const messageType = result.messageType || "afternoon-morning";
+
+    let greeting = "";
+
+    if (messageType === "afternoon-morning") {
+      greeting = `Good ${time}, ${name}`;
+    } else if (messageType === "date") {
+      greeting = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+    } else if (messageType === "time-12") {
+      greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+    } else if (messageType === "time-24") {
+      greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+    } else if (messageType === "custom") {
+      greeting = result.messageCustomText || "";
     }
 
     if (result.titleEffect === "typewriter") {

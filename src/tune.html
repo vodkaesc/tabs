@@ -353,6 +353,7 @@
 
     </div>
 
+
     <!-- message -->
     <div class="section">
         <div class="section-title">message</div>
@@ -395,7 +396,25 @@
                 max="10" />
         </div>
 
+        <p class="setting-label">message.type</p>
+        <div class="btn-group" id="message-type-group" style="grid-template-columns: 1fr 1fr;">
+            <button class="option-btn active" data-value="afternoon-morning">afternoon-morning</button>
+            <button class="option-btn" data-value="date">date</button>
+            <button class="option-btn" data-value="time-12">time-12</button>
+            <button class="option-btn" data-value="time-24">time-24</button>
+            <button class="option-btn" data-value="custom">custom</button>
+        </div>
+
+        <div id="custom-message-section" style="display:none">
+            <p class="setting-label">message.customText</p>
+            <div class="input-wrapper">
+                <span class="input-prefix">&gt;</span>
+                <input type="text" id="message-custom-text" class="setting-input" placeholder="stay focused." />
+            </div>
+        </div>
+
     </div>
+
 
     <div class="save-bar">
         <button class="btn btn-save">save</button>

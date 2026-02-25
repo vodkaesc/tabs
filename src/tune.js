@@ -15,10 +15,14 @@ const customFontSection = document.getElementById("custom-font-section");
 const messageFontInput = document.getElementById("message-font");
 const messageColorInput = document.getElementById("message-color");
 const messageSizeInput = document.getElementById("message-size");
+const messageTypeBtns = document.querySelectorAll("#message-type-group .option-btn");
+const customMessageSection = document.getElementById("custom-message-section");
+const messageCustomTextInput = document.getElementById("message-custom-text");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
 let selectedMessageFont = "default";
+let selectedMessageType = "afternoon-morning";
 let faviconBase64 = null;
 
 // title effect buttons
@@ -50,6 +54,16 @@ messageFontBtns.forEach(btn => {
   });
 });
 
+// message type buttons
+messageTypeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    messageTypeBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedMessageType = btn.dataset.value;
+    customMessageSection.style.display = selectedMessageType === "custom" ? "block" : "none";
+  });
+});
+
 // file upload
 faviconUpload.addEventListener("change", () => {
   const file = faviconUpload.files[0];
@@ -76,13 +90,14 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
   messageEnabledToggle.checked = result.messageEnabled !== false;
   if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
   if (result.messageTextSize) messageSizeInput.value = result.messageTextSize;
+  if (result.messageCustomText) messageCustomTextInput.value = result.messageCustomText;
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => {
@@ -101,6 +116,12 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
   });
   customFontSection.style.display = selectedMessageFont === "custom" ? "block" : "none";
   if (result.messageFontFamily) messageFontInput.value = result.messageFontFamily;
+
+  selectedMessageType = result.messageType || "afternoon-morning";
+  messageTypeBtns.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.value === selectedMessageType);
+  });
+  customMessageSection.style.display = selectedMessageType === "custom" ? "block" : "none";
 
   chrome.storage.local.get(["faviconBase64"], (local) => {
     if (local.faviconBase64) {
@@ -126,6 +147,8 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     messageFontFamily: messageFontInput.value,
     messageTextColor: messageColorInput.value,
     messageTextSize: messageSizeInput.value,
+    messageType: selectedMessageType,
+    messageCustomText: messageCustomTextInput.value,
   }, () => {
     if (faviconBase64) {
       chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));
