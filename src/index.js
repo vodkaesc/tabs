@@ -1,23 +1,28 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType"], (result) => {
-  // greeting
-  const name = result.username || "user";
-  const hour = new Date().getHours();
-  const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
-  const greeting = `Good ${time}, ${name}`;
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled"], (result) => {
   const greetingEl = document.getElementById("greeting");
 
-  if (result.titleEffect === "typewriter") {
-    let i = 0;
-    const type = () => {
-      if (i < greeting.length) {
-        greetingEl.textContent += greeting[i];
-        i++;
-        setTimeout(type, 60);
-      }
-    };
-    type();
+  // greeting
+  if (result.messageEnabled === false) {
+    greetingEl.style.display = "none";
   } else {
-    greetingEl.textContent = greeting;
+    const name = result.username || "user";
+    const hour = new Date().getHours();
+    const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
+    const greeting = `Good ${time}, ${name}`;
+
+    if (result.titleEffect === "typewriter") {
+      let i = 0;
+      const type = () => {
+        if (i < greeting.length) {
+          greetingEl.textContent += greeting[i];
+          i++;
+          setTimeout(type, 60);
+        }
+      };
+      type();
+    } else {
+      greetingEl.textContent = greeting;
+    }
   }
 
   // tab title

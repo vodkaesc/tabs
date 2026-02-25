@@ -9,6 +9,7 @@ const faviconFilename = document.getElementById("favicon-filename");
 const faviconPreviewImg = document.getElementById("favicon-preview-img");
 const faviconPreviewEmpty = document.getElementById("favicon-preview-empty");
 const faviconReset = document.getElementById("favicon-reset");
+const messageEnabledToggle = document.getElementById("message-enabled");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
@@ -59,10 +60,11 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
+  messageEnabledToggle.checked = result.messageEnabled !== false;
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => {
@@ -75,7 +77,6 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
   });
   customFaviconSection.style.display = selectedFaviconType === "custom" ? "block" : "none";
 
-  // load saved favicon from local storage (too big for sync)
   chrome.storage.local.get(["faviconBase64"], (local) => {
     if (local.faviconBase64) {
       faviconBase64 = local.faviconBase64;
@@ -95,8 +96,8 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     dynamicTitle: dynamicTitleToggle.checked,
     titleEffect: selectedEffect,
     faviconType: selectedFaviconType,
+    messageEnabled: messageEnabledToggle.checked,
   }, () => {
-    // favicon goes to local storage because it's a big base64 string
     if (faviconBase64) {
       chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));
     } else {
