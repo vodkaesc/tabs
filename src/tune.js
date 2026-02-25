@@ -18,12 +18,28 @@ const messageSizeInput = document.getElementById("message-size");
 const messageTypeBtns = document.querySelectorAll("#message-type-group .option-btn");
 const customMessageSection = document.getElementById("custom-message-section");
 const messageCustomTextInput = document.getElementById("message-custom-text");
+const wallpaperEnabledToggle = document.getElementById("wallpaper-enabled");
+const wallpaperTypeBtns = document.querySelectorAll("#wallpaper-type-group .option-btn");
+const wallpaperSolidSection = document.getElementById("wallpaper-solid-section");
+const wallpaperUrlSection = document.getElementById("wallpaper-url-section");
+const wallpaperFileSection = document.getElementById("wallpaper-file-section");
+const wallpaperColorInput = document.getElementById("wallpaper-color");
+const wallpaperUrlInput = document.getElementById("wallpaper-url");
+const wallpaperUpload = document.getElementById("wallpaper-upload");
+const wallpaperFilename = document.getElementById("wallpaper-filename");
+const wallpaperReset = document.getElementById("wallpaper-reset");
+const wallpaperPreviewImg = document.getElementById("wallpaper-preview-img");
+const wallpaperPreviewEmpty = document.getElementById("wallpaper-preview-empty");
+const wallpaperBrightnessInput = document.getElementById("wallpaper-brightness");
+const wallpaperBlurInput = document.getElementById("wallpaper-blur");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
 let selectedMessageFont = "default";
 let selectedMessageType = "afternoon-morning";
+let selectedWallpaperType = "default";
 let faviconBase64 = null;
+let wallpaperBase64 = null;
 
 // title effect buttons
 effectBtns.forEach(btn => {
@@ -64,7 +80,71 @@ messageTypeBtns.forEach(btn => {
   });
 });
 
-// file upload
+// wallpaper type buttons
+wallpaperTypeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    wallpaperTypeBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedWallpaperType = btn.dataset.value;
+    updateWallpaperSections();
+  });
+});
+
+function updateWallpaperSections() {
+  wallpaperSolidSection.style.display = selectedWallpaperType === "solid-color" ? "block" : "none";
+  wallpaperUrlSection.style.display = selectedWallpaperType === "url" ? "block" : "none";
+  wallpaperFileSection.style.display = selectedWallpaperType === "file-upload" ? "block" : "none";
+}
+
+function updateWallpaperPreview() {
+  if (selectedWallpaperType === "file-upload" && wallpaperBase64) {
+    wallpaperPreviewImg.src = wallpaperBase64;
+    wallpaperPreviewImg.style.display = "block";
+    wallpaperPreviewEmpty.style.display = "none";
+  } else if (selectedWallpaperType === "url" && wallpaperUrlInput.value) {
+    wallpaperPreviewImg.src = wallpaperUrlInput.value;
+    wallpaperPreviewImg.style.display = "block";
+    wallpaperPreviewEmpty.style.display = "none";
+  } else if (selectedWallpaperType === "solid-color" && wallpaperColorInput.value) {
+    wallpaperPreviewImg.style.display = "none";
+    wallpaperPreviewEmpty.style.display = "block";
+    wallpaperPreviewEmpty.style.color = wallpaperColorInput.value;
+    document.getElementById("wallpaper-preview").style.background = wallpaperColorInput.value;
+  } else {
+    wallpaperPreviewImg.style.display = "none";
+    wallpaperPreviewEmpty.style.display = "block";
+    document.getElementById("wallpaper-preview").style.background = "#1e1e1e";
+    wallpaperPreviewEmpty.style.color = "#555";
+    wallpaperPreviewEmpty.textContent = "no wallpaper";
+  }
+}
+
+// wallpaper url preview on input
+wallpaperUrlInput.addEventListener("input", updateWallpaperPreview);
+wallpaperColorInput.addEventListener("input", updateWallpaperPreview);
+
+// wallpaper file upload
+wallpaperUpload.addEventListener("change", () => {
+  const file = wallpaperUpload.files[0];
+  if (!file) return;
+  wallpaperFilename.textContent = file.name;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    wallpaperBase64 = e.target.result;
+    updateWallpaperPreview();
+  };
+  reader.readAsDataURL(file);
+});
+
+// wallpaper reset
+wallpaperReset.addEventListener("click", () => {
+  wallpaperBase64 = null;
+  wallpaperUpload.value = "";
+  wallpaperFilename.textContent = "No file selected.";
+  updateWallpaperPreview();
+});
+
+// file upload (favicon)
 faviconUpload.addEventListener("change", () => {
   const file = faviconUpload.files[0];
   if (!file) return;
@@ -90,14 +170,19 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText", "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl", "wallpaperBrightness", "wallpaperBlur"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
   messageEnabledToggle.checked = result.messageEnabled !== false;
+  wallpaperEnabledToggle.checked = result.wallpaperEnabled !== false;
   if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
   if (result.messageTextSize) messageSizeInput.value = result.messageTextSize;
   if (result.messageCustomText) messageCustomTextInput.value = result.messageCustomText;
+  if (result.wallpaperColor) wallpaperColorInput.value = result.wallpaperColor;
+  if (result.wallpaperUrl) wallpaperUrlInput.value = result.wallpaperUrl;
+  if (result.wallpaperBrightness) wallpaperBrightnessInput.value = result.wallpaperBrightness;
+  if (result.wallpaperBlur) wallpaperBlurInput.value = result.wallpaperBlur;
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => {
@@ -123,13 +208,24 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
   });
   customMessageSection.style.display = selectedMessageType === "custom" ? "block" : "none";
 
-  chrome.storage.local.get(["faviconBase64"], (local) => {
+  selectedWallpaperType = result.wallpaperType || "default";
+  wallpaperTypeBtns.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.value === selectedWallpaperType);
+  });
+  updateWallpaperSections();
+
+  chrome.storage.local.get(["faviconBase64", "wallpaperBase64"], (local) => {
     if (local.faviconBase64) {
       faviconBase64 = local.faviconBase64;
       faviconPreviewImg.src = faviconBase64;
       faviconPreviewImg.style.display = "block";
       faviconPreviewEmpty.style.display = "none";
       faviconFilename.textContent = "saved icon";
+    }
+    if (local.wallpaperBase64) {
+      wallpaperBase64 = local.wallpaperBase64;
+      wallpaperFilename.textContent = "saved wallpaper";
+      updateWallpaperPreview();
     }
   });
 });
@@ -149,12 +245,19 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     messageTextSize: messageSizeInput.value,
     messageType: selectedMessageType,
     messageCustomText: messageCustomTextInput.value,
+    wallpaperEnabled: wallpaperEnabledToggle.checked,
+    wallpaperType: selectedWallpaperType,
+    wallpaperColor: wallpaperColorInput.value,
+    wallpaperUrl: wallpaperUrlInput.value,
+    wallpaperBrightness: wallpaperBrightnessInput.value,
+    wallpaperBlur: wallpaperBlurInput.value,
   }, () => {
-    if (faviconBase64) {
-      chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));
-    } else {
-      chrome.storage.local.remove("faviconBase64", () => showToast("changes saved"));
-    }
+    const saves = [];
+    if (faviconBase64) saves.push(new Promise(res => chrome.storage.local.set({ faviconBase64 }, res)));
+    else saves.push(new Promise(res => chrome.storage.local.remove("faviconBase64", res)));
+    if (wallpaperBase64) saves.push(new Promise(res => chrome.storage.local.set({ wallpaperBase64 }, res)));
+    else saves.push(new Promise(res => chrome.storage.local.remove("wallpaperBase64", res)));
+    Promise.all(saves).then(() => showToast("changes saved"));
   });
 });
 

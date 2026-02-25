@@ -1,12 +1,45 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText", "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl", "wallpaperBrightness", "wallpaperBlur"], (result) => {
   const greetingEl = document.getElementById("greeting");
+
+  // wallpaper — use a separate bg element so filter doesn't affect UI
+  if (result.wallpaperEnabled !== false) {
+    const brightness = result.wallpaperBrightness || 1;
+    const blur = result.wallpaperBlur || 0;
+    const filter = `brightness(${brightness}) blur(${blur}px)`;
+
+    const bg = document.createElement("div");
+    bg.id = "wallpaper-bg";
+    bg.style.cssText = `
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      filter: ${filter};
+    `;
+
+    if (result.wallpaperType === "solid-color" && result.wallpaperColor) {
+      let color = result.wallpaperColor.trim();
+      if (!color.startsWith("#")) color = "#" + color;
+      bg.style.background = color;
+      document.body.appendChild(bg);
+    } else if (result.wallpaperType === "url" && result.wallpaperUrl) {
+      bg.style.backgroundImage = `url('${result.wallpaperUrl}')`;
+      document.body.appendChild(bg);
+    } else if (result.wallpaperType === "file-upload") {
+      chrome.storage.local.get(["wallpaperBase64"], (local) => {
+        if (local.wallpaperBase64) {
+          bg.style.backgroundImage = `url('${local.wallpaperBase64}')`;
+          document.body.appendChild(bg);
+        }
+      });
+    }
+  }
 
   // greeting
   if (result.messageEnabled === false) {
     greetingEl.style.display = "none";
   } else {
-
-    // apply custom font
     if (result.messageFontType === "custom" && result.messageFontFamily) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
@@ -15,17 +48,9 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
       greetingEl.style.fontFamily = `'${result.messageFontFamily}', sans-serif`;
     }
 
-    // apply text color
-    if (result.messageTextColor) {
-      greetingEl.style.color = result.messageTextColor;
-    }
+    if (result.messageTextColor) greetingEl.style.color = result.messageTextColor;
+    if (result.messageTextSize) greetingEl.style.fontSize = `${result.messageTextSize}rem`;
 
-    // apply text size
-    if (result.messageTextSize) {
-      greetingEl.style.fontSize = `${result.messageTextSize}rem`;
-    }
-
-    // build message based on type
     const name = result.username || "user";
     const now = new Date();
     const hour = now.getHours();
@@ -33,18 +58,11 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
     const messageType = result.messageType || "afternoon-morning";
 
     let greeting = "";
-
-    if (messageType === "afternoon-morning") {
-      greeting = `Good ${time}, ${name}`;
-    } else if (messageType === "date") {
-      greeting = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
-    } else if (messageType === "time-12") {
-      greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
-    } else if (messageType === "time-24") {
-      greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
-    } else if (messageType === "custom") {
-      greeting = result.messageCustomText || "";
-    }
+    if (messageType === "afternoon-morning") greeting = `Good ${time}, ${name}`;
+    else if (messageType === "date") greeting = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+    else if (messageType === "time-12") greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+    else if (messageType === "time-24") greeting = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+    else if (messageType === "custom") greeting = result.messageCustomText || "";
 
     if (result.titleEffect === "typewriter") {
       let i = 0;
@@ -76,7 +94,6 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
 
   // search
   const searchInput = document.getElementById("search");
-
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const query = searchInput.value.trim();

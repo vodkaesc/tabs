@@ -232,6 +232,27 @@
             object-fit: contain;
         }
 
+        .wallpaper-preview {
+            width: 100%;
+            height: 160px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 0.8rem;
+        }
+
+        .wallpaper-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .save-bar {
             position: fixed;
             bottom: 0;
@@ -353,7 +374,6 @@
 
     </div>
 
-
     <!-- message -->
     <div class="section">
         <div class="section-title">message</div>
@@ -415,6 +435,79 @@
 
     </div>
 
+    <!-- wallpaper -->
+    <div class="section">
+        <div class="section-title">wallpaper</div>
+
+        <div class="toggle-row">
+            <div>
+                <p class="setting-label">wallpaper.enabled</p>
+            </div>
+            <label class="toggle">
+                <input type="checkbox" id="wallpaper-enabled" checked />
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <p class="setting-label">wallpaper.type</p>
+        <div class="btn-group" id="wallpaper-type-group">
+            <button class="option-btn active" data-value="default">default</button>
+            <button class="option-btn" data-value="solid-color">solid-color</button>
+            <button class="option-btn" data-value="url">url</button>
+            <button class="option-btn" data-value="file-upload">file-upload</button>
+        </div>
+
+        <!-- solid color input -->
+        <div id="wallpaper-solid-section" style="display:none">
+            <p class="setting-label">wallpaper.color</p>
+            <div class="input-wrapper">
+                <span class="input-prefix">&gt;</span>
+                <input type="text" id="wallpaper-color" class="setting-input" placeholder="#000000" />
+            </div>
+        </div>
+
+        <!-- url input -->
+        <div id="wallpaper-url-section" style="display:none">
+            <p class="setting-label">wallpaper.url</p>
+            <div class="input-wrapper">
+                <span class="input-prefix">&gt;</span>
+                <input type="text" id="wallpaper-url" class="setting-input" placeholder="https://..." />
+            </div>
+        </div>
+
+        <!-- file upload -->
+        <div id="wallpaper-file-section" style="display:none">
+            <p class="setting-label">wallpaper.file</p>
+            <p class="setting-hint">note: wallpaper is stored locally due to size</p>
+            <div class="favicon-upload-row">
+                <label class="favicon-upload-btn">
+                    <input type="file" id="wallpaper-upload" accept="image/*" />
+                    Browse...
+                </label>
+                <span id="wallpaper-filename">No file selected.</span>
+                <button class="favicon-reset-btn" id="wallpaper-reset">reset</button>
+            </div>
+        </div>
+
+        <!-- preview -->
+        <div class="wallpaper-preview" id="wallpaper-preview">
+            <span id="wallpaper-preview-empty">no wallpaper</span>
+            <img id="wallpaper-preview-img" src="" alt="" style="display:none" />
+        </div>
+
+        <p class="setting-label">wallpaper.filters.brightness</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="number" id="wallpaper-brightness" class="setting-input" placeholder="1" step="0.1" min="0" max="3" />
+        </div>
+
+        <p class="setting-label">wallpaper.filters.blur</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="number" id="wallpaper-blur" class="setting-input" placeholder="0" step="1" min="0" max="20" />
+        </div>
+
+    </div>
 
     <div class="save-bar">
         <button class="btn btn-save">save</button>
