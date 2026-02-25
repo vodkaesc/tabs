@@ -1,4 +1,4 @@
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily"], (result) => {
   const greetingEl = document.getElementById("greeting");
 
   // greeting
@@ -9,6 +9,15 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
     const hour = new Date().getHours();
     const time = hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
     const greeting = `Good ${time}, ${name}`;
+
+    // apply custom font
+    if (result.messageFontType === "custom" && result.messageFontFamily) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(result.messageFontFamily)}&display=swap`;
+      document.head.appendChild(link);
+      greetingEl.style.fontFamily = `'${result.messageFontFamily}', sans-serif`;
+    }
 
     if (result.titleEffect === "typewriter") {
       let i = 0;

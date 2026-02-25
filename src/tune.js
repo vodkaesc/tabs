@@ -10,9 +10,13 @@ const faviconPreviewImg = document.getElementById("favicon-preview-img");
 const faviconPreviewEmpty = document.getElementById("favicon-preview-empty");
 const faviconReset = document.getElementById("favicon-reset");
 const messageEnabledToggle = document.getElementById("message-enabled");
+const messageFontBtns = document.querySelectorAll("#message-font-group .option-btn");
+const customFontSection = document.getElementById("custom-font-section");
+const messageFontInput = document.getElementById("message-font");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
+let selectedMessageFont = "default";
 let faviconBase64 = null;
 
 // title effect buttons
@@ -31,6 +35,16 @@ faviconTypeBtns.forEach(btn => {
     btn.classList.add("active");
     selectedFaviconType = btn.dataset.value;
     customFaviconSection.style.display = selectedFaviconType === "custom" ? "block" : "none";
+  });
+});
+
+// message font buttons
+messageFontBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    messageFontBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedMessageFont = btn.dataset.value;
+    customFontSection.style.display = selectedMessageFont === "custom" ? "block" : "none";
   });
 });
 
@@ -60,7 +74,7 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled"], (result) => {
+chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily"], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
@@ -76,6 +90,13 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
     btn.classList.toggle("active", btn.dataset.value === selectedFaviconType);
   });
   customFaviconSection.style.display = selectedFaviconType === "custom" ? "block" : "none";
+
+  selectedMessageFont = result.messageFontType || "default";
+  messageFontBtns.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.value === selectedMessageFont);
+  });
+  customFontSection.style.display = selectedMessageFont === "custom" ? "block" : "none";
+  if (result.messageFontFamily) messageFontInput.value = result.messageFontFamily;
 
   chrome.storage.local.get(["faviconBase64"], (local) => {
     if (local.faviconBase64) {
@@ -97,6 +118,8 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     titleEffect: selectedEffect,
     faviconType: selectedFaviconType,
     messageEnabled: messageEnabledToggle.checked,
+    messageFontType: selectedMessageFont,
+    messageFontFamily: messageFontInput.value,
   }, () => {
     if (faviconBase64) {
       chrome.storage.local.set({ faviconBase64 }, () => showToast("changes saved"));

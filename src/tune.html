@@ -78,6 +78,7 @@
       border-radius: 6px;
       padding: 10px 12px;
       margin-bottom: 20px;
+      margin-top: 12px;
     }
 
     .input-prefix {
@@ -351,20 +352,35 @@
   </div>
 
   <!-- message -->
-<div class="section">
-  <div class="section-title">message</div>
+  <div class="section">
+    <div class="section-title">message</div>
 
-  <div class="toggle-row">
-    <div>
-      <p class="setting-label">message.enabled</p>
+    <div class="toggle-row">
+      <div>
+        <p class="setting-label">message.enabled</p>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="message-enabled" checked />
+        <span class="slider"></span>
+      </label>
     </div>
-    <label class="toggle">
-      <input type="checkbox" id="message-enabled" checked />
-      <span class="slider"></span>
-    </label>
-  </div>
 
-</div>
+    <p class="setting-label">message.font.type</p>
+    <div class="btn-group" id="message-font-group">
+      <button class="option-btn active" data-value="default">default</button>
+      <button class="option-btn" data-value="custom">custom</button>
+    </div>
+
+    <div id="custom-font-section" style="display:none">
+      <p class="setting-label">message.font.family</p>
+      <p class="setting-hint">enter any Google Fonts font name e.g. "Roboto", "Playfair Display"</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input type="text" id="message-font" class="setting-input" placeholder="Roboto" />
+      </div>
+    </div>
+
+  </div>
 
   <div class="save-bar">
     <button class="btn btn-save">save</button>
