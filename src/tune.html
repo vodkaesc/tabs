@@ -3,9 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <title>Tune</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #111;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      padding: 48px 0 120px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .header h1 span {
+      color: #4ade80;
+    }
+
+    .section {
+      max-width: 640px;
+      margin: 0 auto 40px;
+      padding: 0 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #888;
+      font-size: 0.8rem;
+      margin-bottom: 24px;
+    }
+
+    .section-title::before,
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #333;
+    }
+
+    .setting-label {
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 20px;
+    }
+
+    .input-prefix {
+      color: #4ade80;
+      margin-right: 10px;
+      font-size: 0.85rem;
+    }
+
+    .setting-input {
+      background: none;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    .save-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px 24px;
+      background: #111;
+      border-top: 1px solid #222;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 10px 32px;
+      border: none;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      background: #4ade80;
+      color: #111;
+      font-weight: 700;
+    }
+
+
+    #toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1e1e;
+  border: 1px solid #4ade80;
+  color: #4ade80;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+#toast.show {
+  opacity: 1;
+}
+  </style>
 </head>
 <body>
-  <h1>tune page</h1>
-  <a href="index.html">← back</a>
+<div id="toast"></div>
+  <div class="header">
+    <h1>tabs<span>/tune</span></h1>
+  </div>
+
+  <div class="section">
+    <div class="section-title">user</div>
+
+    <p class="setting-label">user.name</p>
+    <div class="input-wrapper">
+      <span class="input-prefix">&gt;</span>
+      <input type="text" id="username" class="setting-input" placeholder="your name" />
+    </div>
+  </div>
+
+  <div class="save-bar">
+    <button class="btn btn-save">save</button>
+  </div>
+
+  <script src="tune.js"></script>
+
 </body>
 </html>
