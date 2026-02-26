@@ -6,15 +6,21 @@
     <title>tabs</title>
     <link id="favicon" rel="icon" href="" />
 
-    <!-- runs synchronously before anything renders — kills the flash -->
     <script>
+        // runs instantly before anything else — applies ALL cached visual settings
         (function () {
-            const cache = localStorage.getItem("tabs_bg_cache");
-            if (cache) {
-                const el = document.createElement("div");
-                el.style.cssText = "position:fixed;inset:0;z-index:-1;" + cache;
-                document.documentElement.appendChild(el);
-            }
+            try {
+                const c = JSON.parse(localStorage.getItem("tabs_cache") || "{}");
+                const root = document.documentElement;
+                if (c.searchBorderColor) root.style.setProperty("--search-focus-color", c.searchBorderColor);
+                if (c.searchTextColor) root.style.setProperty("--search-text-color", c.searchTextColor);
+                if (c.searchIconColor) root.style.setProperty("--search-icon-color", c.searchIconColor);
+                if (c.wallpaper) {
+                    const el = document.createElement("div");
+                    el.style.cssText = c.wallpaper;
+                    document.documentElement.appendChild(el);
+                }
+            } catch (e) { }
         })();
     </script>
 
@@ -49,15 +55,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 24px;
-            opacity: 0;
-            animation: fadein 0.15s ease 0.03s forwards;
-        }
-
-        @keyframes fadein {
-            to {
-                opacity: 1;
-            }
+            gap: 28px;
+            margin-bottom: 100px;
         }
 
         .search-wrapper {

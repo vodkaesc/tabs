@@ -24,11 +24,7 @@ chrome.storage.sync.get([
   if (result.searchBorderColor) root.style.setProperty("--search-focus-color", result.searchBorderColor);
   if (result.searchTextColor) root.style.setProperty("--search-text-color", result.searchTextColor);
   if (result.searchIconColor) root.style.setProperty("--search-icon-color", result.searchIconColor);
-
-  // search placeholder
   if (result.searchPlaceholder) searchInput.placeholder = result.searchPlaceholder;
-
-  // hide search if disabled
   if (result.searchEnabled === false) searchWrapper.style.display = "none";
 
   // wallpaper
@@ -44,15 +40,11 @@ chrome.storage.sync.get([
       if (!color.startsWith("#")) color = "#" + color;
       bg.style.background = color;
       document.body.appendChild(bg);
-      localStorage.setItem("tabs_bg_cache", `background:${color};`);
-
     } else if (result.wallpaperType === "url" && result.wallpaperUrl) {
       bg.style.backgroundImage = `url('${result.wallpaperUrl}')`;
       bg.style.backgroundSize = "cover";
       bg.style.backgroundPosition = "center";
       document.body.appendChild(bg);
-      localStorage.setItem("tabs_bg_cache", `background:#111 url('${result.wallpaperUrl}') center/cover no-repeat;filter:${filter};`);
-
     } else if (result.wallpaperType === "file-upload") {
       chrome.storage.local.get(["wallpaperBase64"], (local) => {
         if (local.wallpaperBase64) {
@@ -60,16 +52,9 @@ chrome.storage.sync.get([
           bg.style.backgroundSize = "cover";
           bg.style.backgroundPosition = "center";
           document.body.appendChild(bg);
-          // don't cache base64 in localStorage — too big, use a color hint instead
-          localStorage.setItem("tabs_bg_cache", `background:#111;`);
         }
       });
-
-    } else {
-      localStorage.removeItem("tabs_bg_cache");
     }
-  } else {
-    localStorage.removeItem("tabs_bg_cache");
   }
 
   // greeting
@@ -138,7 +123,7 @@ chrome.storage.sync.get([
             e.ctrlKey ? window.open(url.href, "_blank") : (window.location.href = url.href);
             return;
           }
-        } catch (_) { }
+        } catch (_) {}
       }
 
       const href = engine + encodeURIComponent(query);
