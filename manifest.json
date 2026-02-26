@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "tabs",
   "version": "1.0.0",
+  "description": "a minimal, customizable new tab page",
   "chrome_url_overrides": {
     "newtab": "src/index.html"
   },
@@ -10,5 +11,13 @@
     "16": "src/logo.jpg",
     "48": "src/logo.jpg",
     "128": "src/logo.jpg"
+  },
+  "action": {
+    "default_title": "tabs",
+    "default_icon": {
+      "16": "src/logo.jpg",
+      "48": "src/logo.jpg",
+      "128": "src/logo.jpg"
+    }
   }
 }
