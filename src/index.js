@@ -6,6 +6,8 @@ const engines = {
   yahoo: "https://search.yahoo.com/search?p=",
 };
 
+const DEFAULT_WALLPAPER = "walp.png";
+
 chrome.storage.sync.get([
   "username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType",
   "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor",
@@ -40,11 +42,13 @@ chrome.storage.sync.get([
       if (!color.startsWith("#")) color = "#" + color;
       bg.style.background = color;
       document.body.appendChild(bg);
+
     } else if (result.wallpaperType === "url" && result.wallpaperUrl) {
       bg.style.backgroundImage = `url('${result.wallpaperUrl}')`;
       bg.style.backgroundSize = "cover";
       bg.style.backgroundPosition = "center";
       document.body.appendChild(bg);
+
     } else if (result.wallpaperType === "file-upload") {
       chrome.storage.local.get(["wallpaperBase64"], (local) => {
         if (local.wallpaperBase64) {
@@ -54,6 +58,13 @@ chrome.storage.sync.get([
           document.body.appendChild(bg);
         }
       });
+
+    } else {
+      // default wallpaper — shown for new users or when type is "default"
+      bg.style.backgroundImage = `url('${DEFAULT_WALLPAPER}')`;
+      bg.style.backgroundSize = "cover";
+      bg.style.backgroundPosition = "center";
+      document.body.appendChild(bg);
     }
   }
 

@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="logo-r.ico" />
     <title>Tune</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,6 +35,38 @@
 
         .header h1 span {
             color: #4ade80;
+        }
+
+
+        .header-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 40px;
+            margin-bottom: 12px;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #666;
+        }
+
+        .header-links a {
+            color: #4ade80;
+            text-decoration: none;
+        }
+
+        .header-links a:hover {
+            text-decoration: underline;
+        }
+
+        .header-links span {
+            color: #444;
         }
 
         .section {
@@ -303,9 +336,18 @@
 </head>
 
 <body>
+
+
     <div id="toast"></div>
+
     <div class="header">
+        <img src="logo.jpg" alt="logo" class="header-logo" />
         <h1>tabs<span>/tune</span></h1>
+        <div class="header-links">
+            <a href="https://github.com/vodkaesc/tabs" target="_blank">github</a>
+            <span>|</span>
+            <span>v1.0.0</span>
+        </div>
     </div>
 
     <!-- user -->
