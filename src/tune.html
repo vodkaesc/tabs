@@ -284,8 +284,7 @@
         #toast {
             position: fixed;
             top: 24px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 24px;
             background: #1e1e1e;
             border: 1px solid #4ade80;
             color: #4ade80;
@@ -304,9 +303,7 @@
 </head>
 
 <body>
-
     <div id="toast"></div>
-
     <div class="header">
         <h1>tabs<span>/tune</span></h1>
     </div>
@@ -324,43 +321,34 @@
     <!-- title -->
     <div class="section">
         <div class="section-title">title</div>
-
         <p class="setting-label">title.defaultTitle</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
         </div>
-
         <div class="toggle-row">
             <div>
                 <p class="setting-label">title.dynamic.enabled</p>
                 <p class="setting-hint">tab title changes to match what you type in the search bar</p>
             </div>
-            <label class="toggle">
-                <input type="checkbox" id="dynamic-title" />
-                <span class="slider"></span>
-            </label>
+            <label class="toggle"><input type="checkbox" id="dynamic-title" /><span class="slider"></span></label>
         </div>
-
         <p class="setting-label">title.effect</p>
         <div class="btn-group" id="title-effect-group">
             <button class="option-btn active" data-value="none">none</button>
             <button class="option-btn" data-value="typewriter">typewriter</button>
         </div>
-
         <p class="setting-label">title.faviconType</p>
         <div class="btn-group" id="favicon-type-group">
             <button class="option-btn active" data-value="default">default</button>
             <button class="option-btn" data-value="custom">custom</button>
         </div>
-
         <div id="custom-favicon-section" style="display:none">
             <p class="setting-label">title.customFavicon</p>
             <p class="setting-hint">note: the customFavicon is not included when exporting configs due to size</p>
             <div class="favicon-upload-row">
                 <label class="favicon-upload-btn">
-                    <input type="file" id="favicon-upload" accept="image/*" />
-                    Browse...
+                    <input type="file" id="favicon-upload" accept="image/*" />Browse...
                 </label>
                 <span id="favicon-filename">No file selected.</span>
                 <button class="favicon-reset-btn" id="favicon-reset">reset</button>
@@ -371,29 +359,23 @@
                 <div id="favicon-preview-empty">⊘</div>
             </div>
         </div>
-
     </div>
 
     <!-- message -->
     <div class="section">
         <div class="section-title">message</div>
-
         <div class="toggle-row">
             <div>
                 <p class="setting-label">message.enabled</p>
             </div>
-            <label class="toggle">
-                <input type="checkbox" id="message-enabled" checked />
-                <span class="slider"></span>
-            </label>
+            <label class="toggle"><input type="checkbox" id="message-enabled" checked /><span
+                    class="slider"></span></label>
         </div>
-
         <p class="setting-label">message.font.type</p>
         <div class="btn-group" id="message-font-group">
             <button class="option-btn active" data-value="default">default</button>
             <button class="option-btn" data-value="custom">custom</button>
         </div>
-
         <div id="custom-font-section" style="display:none">
             <p class="setting-label">message.font.family</p>
             <p class="setting-hint">enter any Google Fonts font name e.g. "Roboto", "Playfair Display"</p>
@@ -402,29 +384,25 @@
                 <input type="text" id="message-font" class="setting-input" placeholder="Roboto" />
             </div>
         </div>
-
         <p class="setting-label">message.textColor</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="message-color" class="setting-input" placeholder="#ffffff" />
         </div>
-
         <p class="setting-label">message.textSize</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="number" id="message-size" class="setting-input" placeholder="3.75" step="0.25" min="0.5"
                 max="10" />
         </div>
-
         <p class="setting-label">message.type</p>
-        <div class="btn-group" id="message-type-group" style="grid-template-columns: 1fr 1fr;">
+        <div class="btn-group" id="message-type-group">
             <button class="option-btn active" data-value="afternoon-morning">afternoon-morning</button>
             <button class="option-btn" data-value="date">date</button>
             <button class="option-btn" data-value="time-12">time-12</button>
             <button class="option-btn" data-value="time-24">time-24</button>
             <button class="option-btn" data-value="custom">custom</button>
         </div>
-
         <div id="custom-message-section" style="display:none">
             <p class="setting-label">message.customText</p>
             <div class="input-wrapper">
@@ -432,23 +410,18 @@
                 <input type="text" id="message-custom-text" class="setting-input" placeholder="stay focused." />
             </div>
         </div>
-
     </div>
 
     <!-- wallpaper -->
     <div class="section">
         <div class="section-title">wallpaper</div>
-
         <div class="toggle-row">
             <div>
                 <p class="setting-label">wallpaper.enabled</p>
             </div>
-            <label class="toggle">
-                <input type="checkbox" id="wallpaper-enabled" checked />
-                <span class="slider"></span>
-            </label>
+            <label class="toggle"><input type="checkbox" id="wallpaper-enabled" checked /><span
+                    class="slider"></span></label>
         </div>
-
         <p class="setting-label">wallpaper.type</p>
         <div class="btn-group" id="wallpaper-type-group">
             <button class="option-btn active" data-value="default">default</button>
@@ -456,8 +429,6 @@
             <button class="option-btn" data-value="url">url</button>
             <button class="option-btn" data-value="file-upload">file-upload</button>
         </div>
-
-        <!-- solid color input -->
         <div id="wallpaper-solid-section" style="display:none">
             <p class="setting-label">wallpaper.color</p>
             <div class="input-wrapper">
@@ -465,8 +436,6 @@
                 <input type="text" id="wallpaper-color" class="setting-input" placeholder="#000000" />
             </div>
         </div>
-
-        <!-- url input -->
         <div id="wallpaper-url-section" style="display:none">
             <p class="setting-label">wallpaper.url</p>
             <div class="input-wrapper">
@@ -474,39 +443,89 @@
                 <input type="text" id="wallpaper-url" class="setting-input" placeholder="https://..." />
             </div>
         </div>
-
-        <!-- file upload -->
         <div id="wallpaper-file-section" style="display:none">
             <p class="setting-label">wallpaper.file</p>
             <p class="setting-hint">note: wallpaper is stored locally due to size</p>
             <div class="favicon-upload-row">
                 <label class="favicon-upload-btn">
-                    <input type="file" id="wallpaper-upload" accept="image/*" />
-                    Browse...
+                    <input type="file" id="wallpaper-upload" accept="image/*" />Browse...
                 </label>
                 <span id="wallpaper-filename">No file selected.</span>
                 <button class="favicon-reset-btn" id="wallpaper-reset">reset</button>
             </div>
         </div>
-
-        <!-- preview -->
         <div class="wallpaper-preview" id="wallpaper-preview">
             <span id="wallpaper-preview-empty">no wallpaper</span>
             <img id="wallpaper-preview-img" src="" alt="" style="display:none" />
         </div>
-
         <p class="setting-label">wallpaper.filters.brightness</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
-            <input type="number" id="wallpaper-brightness" class="setting-input" placeholder="1" step="0.1" min="0" max="3" />
+            <input type="number" id="wallpaper-brightness" class="setting-input" placeholder="1" step="0.1" min="0"
+                max="3" />
         </div>
-
         <p class="setting-label">wallpaper.filters.blur</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="number" id="wallpaper-blur" class="setting-input" placeholder="0" step="1" min="0" max="20" />
         </div>
+    </div>
 
+    <!-- search -->
+    <div class="section">
+        <div class="section-title">search</div>
+        <div class="toggle-row">
+            <div>
+                <p class="setting-label">search.enabled</p>
+                <p class="setting-hint">tip: press Ctrl+Enter to open search in a new tab</p>
+            </div>
+            <label class="toggle"><input type="checkbox" id="search-enabled" checked /><span
+                    class="slider"></span></label>
+        </div>
+
+        <p class="setting-label">search.engine</p>
+        <div class="btn-group" id="search-engine-group">
+            <button class="option-btn active" data-value="google">google</button>
+            <button class="option-btn" data-value="duckduckgo">duckduckgo</button>
+            <button class="option-btn" data-value="bing">bing</button>
+            <button class="option-btn" data-value="brave">brave</button>
+            <button class="option-btn" data-value="yahoo">yahoo</button>
+        </div>
+
+        <p class="setting-label">search.placeholderText</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="search-placeholder" class="setting-input" placeholder="search ..." />
+        </div>
+
+        <div class="toggle-row">
+            <div>
+                <p class="setting-label">search.recognizeLinks</p>
+                <p class="setting-hint">typing a URL navigates directly instead of searching</p>
+            </div>
+            <label class="toggle"><input type="checkbox" id="search-recognize-links" checked /><span
+                    class="slider"></span></label>
+        </div>
+
+        <p class="setting-label">search.focusedBorderColor</p>
+        <p class="setting-hint">color of search bar border when focused</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="search-border-color" class="setting-input" placeholder="#4ade80" />
+        </div>
+
+        <p class="setting-label">search.textColor</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="search-text-color" class="setting-input" placeholder="#ffffff" />
+        </div>
+
+        <p class="setting-label">search.searchIconColor</p>
+        <p class="setting-hint">changes the → arrow color</p>
+        <div class="input-wrapper">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="search-icon-color" class="setting-input" placeholder="#4ade80" />
+        </div>
     </div>
 
     <div class="save-bar">

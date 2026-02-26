@@ -32,12 +32,20 @@ const wallpaperPreviewImg = document.getElementById("wallpaper-preview-img");
 const wallpaperPreviewEmpty = document.getElementById("wallpaper-preview-empty");
 const wallpaperBrightnessInput = document.getElementById("wallpaper-brightness");
 const wallpaperBlurInput = document.getElementById("wallpaper-blur");
+const searchEnabledToggle = document.getElementById("search-enabled");
+const searchEngineBtns = document.querySelectorAll("#search-engine-group .option-btn");
+const searchPlaceholderInput = document.getElementById("search-placeholder");
+const searchRecognizeLinksToggle = document.getElementById("search-recognize-links");
+const searchBorderColorInput = document.getElementById("search-border-color");
+const searchTextColorInput = document.getElementById("search-text-color");
+const searchIconColorInput = document.getElementById("search-icon-color");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
 let selectedMessageFont = "default";
 let selectedMessageType = "afternoon-morning";
 let selectedWallpaperType = "default";
+let selectedSearchEngine = "google";
 let faviconBase64 = null;
 let wallpaperBase64 = null;
 
@@ -90,6 +98,15 @@ wallpaperTypeBtns.forEach(btn => {
   });
 });
 
+// search engine buttons
+searchEngineBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    searchEngineBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedSearchEngine = btn.dataset.value;
+  });
+});
+
 function updateWallpaperSections() {
   wallpaperSolidSection.style.display = selectedWallpaperType === "solid-color" ? "block" : "none";
   wallpaperUrlSection.style.display = selectedWallpaperType === "url" ? "block" : "none";
@@ -108,7 +125,6 @@ function updateWallpaperPreview() {
   } else if (selectedWallpaperType === "solid-color" && wallpaperColorInput.value) {
     wallpaperPreviewImg.style.display = "none";
     wallpaperPreviewEmpty.style.display = "block";
-    wallpaperPreviewEmpty.style.color = wallpaperColorInput.value;
     document.getElementById("wallpaper-preview").style.background = wallpaperColorInput.value;
   } else {
     wallpaperPreviewImg.style.display = "none";
@@ -119,11 +135,9 @@ function updateWallpaperPreview() {
   }
 }
 
-// wallpaper url preview on input
 wallpaperUrlInput.addEventListener("input", updateWallpaperPreview);
 wallpaperColorInput.addEventListener("input", updateWallpaperPreview);
 
-// wallpaper file upload
 wallpaperUpload.addEventListener("change", () => {
   const file = wallpaperUpload.files[0];
   if (!file) return;
@@ -136,7 +150,6 @@ wallpaperUpload.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-// wallpaper reset
 wallpaperReset.addEventListener("click", () => {
   wallpaperBase64 = null;
   wallpaperUpload.value = "";
@@ -144,7 +157,6 @@ wallpaperReset.addEventListener("click", () => {
   updateWallpaperPreview();
 });
 
-// file upload (favicon)
 faviconUpload.addEventListener("change", () => {
   const file = faviconUpload.files[0];
   if (!file) return;
@@ -159,7 +171,6 @@ faviconUpload.addEventListener("change", () => {
   reader.readAsDataURL(file);
 });
 
-// reset favicon
 faviconReset.addEventListener("click", () => {
   faviconBase64 = null;
   faviconUpload.value = "";
@@ -170,12 +181,22 @@ faviconReset.addEventListener("click", () => {
 });
 
 // load
-chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType", "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor", "messageTextSize", "messageType", "messageCustomText", "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl", "wallpaperBrightness", "wallpaperBlur"], (result) => {
+chrome.storage.sync.get([
+  "username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType",
+  "messageEnabled", "messageFontType", "messageFontFamily", "messageTextColor",
+  "messageTextSize", "messageType", "messageCustomText",
+  "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl",
+  "wallpaperBrightness", "wallpaperBlur",
+  "searchEnabled", "searchEngine", "searchPlaceholder", "searchRecognizeLinks",
+  "searchBorderColor", "searchTextColor", "searchIconColor"
+], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
   dynamicTitleToggle.checked = result.dynamicTitle || false;
   messageEnabledToggle.checked = result.messageEnabled !== false;
   wallpaperEnabledToggle.checked = result.wallpaperEnabled !== false;
+  searchEnabledToggle.checked = result.searchEnabled !== false;
+  searchRecognizeLinksToggle.checked = result.searchRecognizeLinks !== false;
   if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
   if (result.messageTextSize) messageSizeInput.value = result.messageTextSize;
   if (result.messageCustomText) messageCustomTextInput.value = result.messageCustomText;
@@ -183,36 +204,33 @@ chrome.storage.sync.get(["username", "tabTitle", "dynamicTitle", "titleEffect", 
   if (result.wallpaperUrl) wallpaperUrlInput.value = result.wallpaperUrl;
   if (result.wallpaperBrightness) wallpaperBrightnessInput.value = result.wallpaperBrightness;
   if (result.wallpaperBlur) wallpaperBlurInput.value = result.wallpaperBlur;
+  if (result.searchPlaceholder) searchPlaceholderInput.value = result.searchPlaceholder;
+  if (result.searchBorderColor) searchBorderColorInput.value = result.searchBorderColor;
+  if (result.searchTextColor) searchTextColorInput.value = result.searchTextColor;
+  if (result.searchIconColor) searchIconColorInput.value = result.searchIconColor;
 
   selectedEffect = result.titleEffect || "none";
-  effectBtns.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.value === selectedEffect);
-  });
+  effectBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedEffect));
 
   selectedFaviconType = result.faviconType || "default";
-  faviconTypeBtns.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.value === selectedFaviconType);
-  });
+  faviconTypeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedFaviconType));
   customFaviconSection.style.display = selectedFaviconType === "custom" ? "block" : "none";
 
   selectedMessageFont = result.messageFontType || "default";
-  messageFontBtns.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.value === selectedMessageFont);
-  });
+  messageFontBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedMessageFont));
   customFontSection.style.display = selectedMessageFont === "custom" ? "block" : "none";
   if (result.messageFontFamily) messageFontInput.value = result.messageFontFamily;
 
   selectedMessageType = result.messageType || "afternoon-morning";
-  messageTypeBtns.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.value === selectedMessageType);
-  });
+  messageTypeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedMessageType));
   customMessageSection.style.display = selectedMessageType === "custom" ? "block" : "none";
 
   selectedWallpaperType = result.wallpaperType || "default";
-  wallpaperTypeBtns.forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.value === selectedWallpaperType);
-  });
+  wallpaperTypeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedWallpaperType));
   updateWallpaperSections();
+
+  selectedSearchEngine = result.searchEngine || "google";
+  searchEngineBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedSearchEngine));
 
   chrome.storage.local.get(["faviconBase64", "wallpaperBase64"], (local) => {
     if (local.faviconBase64) {
@@ -251,6 +269,13 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     wallpaperUrl: wallpaperUrlInput.value,
     wallpaperBrightness: wallpaperBrightnessInput.value,
     wallpaperBlur: wallpaperBlurInput.value,
+    searchEnabled: searchEnabledToggle.checked,
+    searchEngine: selectedSearchEngine,
+    searchPlaceholder: searchPlaceholderInput.value,
+    searchRecognizeLinks: searchRecognizeLinksToggle.checked,
+    searchBorderColor: searchBorderColorInput.value,
+    searchTextColor: searchTextColorInput.value,
+    searchIconColor: searchIconColorInput.value,
   }, () => {
     const saves = [];
     if (faviconBase64) saves.push(new Promise(res => chrome.storage.local.set({ faviconBase64 }, res)));

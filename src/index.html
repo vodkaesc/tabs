@@ -5,6 +5,19 @@
     <meta charset="UTF-8" />
     <title>tabs</title>
     <link id="favicon" rel="icon" href="" />
+
+    <!-- runs synchronously before anything renders — kills the flash -->
+    <script>
+        (function () {
+            const cache = localStorage.getItem("tabs_bg_cache");
+            if (cache) {
+                const el = document.createElement("div");
+                el.style.cssText = "position:fixed;inset:0;z-index:-1;" + cache;
+                document.documentElement.appendChild(el);
+            }
+        })();
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
@@ -32,6 +45,58 @@
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
         }
 
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            opacity: 0;
+            animation: fadein 0.15s ease 0.03s forwards;
+        }
+
+        @keyframes fadein {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .search-wrapper {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 480px;
+            gap: 12px;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: border-color 0.2s;
+        }
+
+        .search-wrapper:focus-within {
+            border-color: var(--search-focus-color, #4ade80);
+        }
+
+        .search-arrow {
+            color: var(--search-icon-color, #4ade80);
+            font-size: 1rem;
+        }
+
+        #search {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--search-text-color, #fff);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        #search::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
         #tune-btn {
             position: fixed;
             bottom: 24px;
@@ -46,61 +111,17 @@
         #tune-btn:hover {
             opacity: 1;
         }
-
-        #app {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .search-wrapper {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
-            padding: 12px 16px;
-            width: 480px;
-            gap: 12px;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-        
-
-        .search-arrow {
-            color: #4ade80;
-            font-size: 1rem;
-        }
-
-        #search {
-            background: none;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            width: 100%;
-        }
-
-        #search::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
     </style>
 </head>
 
 <body>
-
-
     <div id="app">
         <h1 id="greeting"></h1>
-        <div class="search-wrapper">
-            <span class="search-arrow">→</span>
+        <div class="search-wrapper" id="search-wrapper">
+            <span class="search-arrow" id="search-arrow">→</span>
             <input type="text" id="search" placeholder="search ..." />
         </div>
     </div>
-
-
     <a href="tune.html" id="tune-btn">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white"
             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -116,9 +137,7 @@
                a1.65 1.65 0 0 0-1.51 1z" />
         </svg>
     </a>
-
     <script src="index.js"></script>
-
 </body>
 
 </html>
