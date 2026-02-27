@@ -39,6 +39,10 @@ const searchRecognizeLinksToggle = document.getElementById("search-recognize-lin
 const searchBorderColorInput = document.getElementById("search-border-color");
 const searchTextColorInput = document.getElementById("search-text-color");
 const searchIconColorInput = document.getElementById("search-icon-color");
+const bmNameInput = document.getElementById("bm-name");
+const bmUrlInput = document.getElementById("bm-url");
+const bmAddBtn = document.getElementById("bm-add-btn");
+const bookmarkList = document.getElementById("bookmark-list");
 
 let selectedEffect = "none";
 let selectedFaviconType = "default";
@@ -48,6 +52,7 @@ let selectedWallpaperType = "default";
 let selectedSearchEngine = "google";
 let faviconBase64 = null;
 let wallpaperBase64 = null;
+let bookmarks = [];
 
 // title effect buttons
 effectBtns.forEach(btn => {
@@ -143,10 +148,7 @@ wallpaperUpload.addEventListener("change", () => {
   if (!file) return;
   wallpaperFilename.textContent = file.name;
   const reader = new FileReader();
-  reader.onload = (e) => {
-    wallpaperBase64 = e.target.result;
-    updateWallpaperPreview();
-  };
+  reader.onload = (e) => { wallpaperBase64 = e.target.result; updateWallpaperPreview(); };
   reader.readAsDataURL(file);
 });
 
@@ -180,6 +182,71 @@ faviconReset.addEventListener("click", () => {
   faviconPreviewEmpty.style.display = "flex";
 });
 
+// bookmarks
+function renderBookmarks() {
+  bookmarkList.innerHTML = "";
+  if (bookmarks.length === 0) {
+    bookmarkList.innerHTML = '<p style="color:#555;font-size:0.8rem;">no bookmarks yet</p>';
+    return;
+  }
+  bookmarks.forEach((bm, i) => {
+    const domain = (() => { try { return new URL(bm.url).hostname; } catch { return null; } })();
+    const item = document.createElement("div");
+    item.className = "bookmark-item";
+
+    if (domain) {
+      const img = document.createElement("img");
+      img.className = "bookmark-item-favicon";
+      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      img.onerror = () => {
+        img.remove();
+        const fb = document.createElement("div");
+        fb.className = "bookmark-item-fallback";
+        fb.textContent = bm.name.charAt(0).toUpperCase();
+        item.insertBefore(fb, item.firstChild);
+      };
+      item.appendChild(img);
+    } else {
+      const fb = document.createElement("div");
+      fb.className = "bookmark-item-fallback";
+      fb.textContent = bm.name.charAt(0).toUpperCase();
+      item.appendChild(fb);
+    }
+
+    const nameEl = document.createElement("span");
+    nameEl.className = "bookmark-item-name";
+    nameEl.textContent = bm.name;
+    item.appendChild(nameEl);
+
+    const urlEl = document.createElement("span");
+    urlEl.className = "bookmark-item-url";
+    urlEl.textContent = bm.url;
+    item.appendChild(urlEl);
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "bookmark-delete-btn";
+    delBtn.textContent = "delete";
+    delBtn.addEventListener("click", () => {
+      bookmarks.splice(i, 1);
+      renderBookmarks();
+    });
+    item.appendChild(delBtn);
+
+    bookmarkList.appendChild(item);
+  });
+}
+
+bmAddBtn.addEventListener("click", () => {
+  const name = bmNameInput.value.trim();
+  let url = bmUrlInput.value.trim();
+  if (!name || !url) return showToast("name and url required");
+  if (!url.startsWith("http")) url = "https://" + url;
+  bookmarks.push({ name, url });
+  renderBookmarks();
+  bmNameInput.value = "";
+  bmUrlInput.value = "";
+});
+
 // load
 chrome.storage.sync.get([
   "username", "tabTitle", "dynamicTitle", "titleEffect", "faviconType",
@@ -188,7 +255,8 @@ chrome.storage.sync.get([
   "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl",
   "wallpaperBrightness", "wallpaperBlur",
   "searchEnabled", "searchEngine", "searchPlaceholder", "searchRecognizeLinks",
-  "searchBorderColor", "searchTextColor", "searchIconColor"
+  "searchBorderColor", "searchTextColor", "searchIconColor",
+  "bookmarks"
 ], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
@@ -208,6 +276,8 @@ chrome.storage.sync.get([
   if (result.searchBorderColor) searchBorderColorInput.value = result.searchBorderColor;
   if (result.searchTextColor) searchTextColorInput.value = result.searchTextColor;
   if (result.searchIconColor) searchIconColorInput.value = result.searchIconColor;
+  bookmarks = result.bookmarks || [];
+  renderBookmarks();
 
   selectedEffect = result.titleEffect || "none";
   effectBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedEffect));
@@ -276,6 +346,7 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     searchBorderColor: searchBorderColorInput.value,
     searchTextColor: searchTextColorInput.value,
     searchIconColor: searchIconColorInput.value,
+    bookmarks,
   }, () => {
     const saves = [];
     if (faviconBase64) saves.push(new Promise(res => chrome.storage.local.set({ faviconBase64 }, res)));

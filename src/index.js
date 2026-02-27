@@ -15,11 +15,13 @@ chrome.storage.sync.get([
   "wallpaperEnabled", "wallpaperType", "wallpaperColor", "wallpaperUrl",
   "wallpaperBrightness", "wallpaperBlur",
   "searchEnabled", "searchEngine", "searchPlaceholder", "searchRecognizeLinks",
-  "searchBorderColor", "searchTextColor", "searchIconColor"
+  "searchBorderColor", "searchTextColor", "searchIconColor",
+  "bookmarks"
 ], (result) => {
   const greetingEl = document.getElementById("greeting");
   const searchInput = document.getElementById("search");
   const searchWrapper = document.getElementById("search-wrapper");
+  const bookmarksRow = document.getElementById("bookmarks-row");
   const root = document.documentElement;
 
   // search colors
@@ -42,13 +44,11 @@ chrome.storage.sync.get([
       if (!color.startsWith("#")) color = "#" + color;
       bg.style.background = color;
       document.body.appendChild(bg);
-
     } else if (result.wallpaperType === "url" && result.wallpaperUrl) {
       bg.style.backgroundImage = `url('${result.wallpaperUrl}')`;
       bg.style.backgroundSize = "cover";
       bg.style.backgroundPosition = "center";
       document.body.appendChild(bg);
-
     } else if (result.wallpaperType === "file-upload") {
       chrome.storage.local.get(["wallpaperBase64"], (local) => {
         if (local.wallpaperBase64) {
@@ -58,15 +58,53 @@ chrome.storage.sync.get([
           document.body.appendChild(bg);
         }
       });
-
     } else {
-      // default wallpaper — shown for new users or when type is "default"
       bg.style.backgroundImage = `url('${DEFAULT_WALLPAPER}')`;
       bg.style.backgroundSize = "cover";
       bg.style.backgroundPosition = "center";
       document.body.appendChild(bg);
     }
   }
+
+  // bookmarks
+  const bookmarks = result.bookmarks || [];
+  bookmarks.forEach((bm) => {
+    const a = document.createElement("a");
+    a.className = "bookmark-tile";
+    a.href = bm.url;
+    a.addEventListener("click", (e) => {
+      if (e.ctrlKey || e.metaKey || e.button === 1) {
+        e.preventDefault();
+        window.open(bm.url, "_blank");
+      }
+    });
+
+    // try to load favicon from google
+    const domain = (() => { try { return new URL(bm.url).hostname; } catch { return null; } })();
+    if (domain) {
+      const img = document.createElement("img");
+      img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+      img.onerror = () => {
+        img.remove();
+        const fb = document.createElement("div");
+        fb.className = "bm-fallback";
+        fb.textContent = bm.name.charAt(0).toUpperCase();
+        a.insertBefore(fb, a.firstChild);
+      };
+      a.appendChild(img);
+    } else {
+      const fb = document.createElement("div");
+      fb.className = "bm-fallback";
+      fb.textContent = bm.name.charAt(0).toUpperCase();
+      a.appendChild(fb);
+    }
+
+    const name = document.createElement("div");
+    name.className = "bm-name";
+    name.textContent = bm.name;
+    a.appendChild(name);
+    bookmarksRow.appendChild(a);
+  });
 
   // greeting
   if (result.messageEnabled === false) {
@@ -119,24 +157,20 @@ chrome.storage.sync.get([
 
   // search
   const engine = engines[result.searchEngine] || engines.google;
-
   searchInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       const query = searchInput.value.trim();
       if (!query) return;
-
       if (result.searchRecognizeLinks !== false) {
         try {
           const url = query.includes(".") && !query.includes(" ")
-            ? new URL(query.startsWith("http") ? query : "https://" + query)
-            : null;
+            ? new URL(query.startsWith("http") ? query : "https://" + query) : null;
           if (url) {
             e.ctrlKey ? window.open(url.href, "_blank") : (window.location.href = url.href);
             return;
           }
-        } catch (_) {}
+        } catch (_) { }
       }
-
       const href = engine + encodeURIComponent(query);
       e.ctrlKey ? window.open(href, "_blank") : (window.location.href = href);
     }

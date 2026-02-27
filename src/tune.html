@@ -37,7 +37,6 @@
             color: #4ade80;
         }
 
-
         .header-logo {
             width: 80px;
             height: 80px;
@@ -102,6 +101,7 @@
             font-size: 0.75rem;
             color: #666;
             margin-top: 4px;
+            margin-bottom: 12px;
         }
 
         .input-wrapper {
@@ -286,6 +286,87 @@
             object-fit: cover;
         }
 
+        /* bookmarks */
+        .bookmark-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+            margin-top: 12px;
+        }
+
+        .bookmark-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+
+        .bookmark-item-favicon {
+            width: 18px;
+            height: 18px;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .bookmark-item-fallback {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bookmark-item-name {
+            flex: 1;
+            font-size: 0.85rem;
+            color: #fff;
+        }
+
+        .bookmark-item-url {
+            font-size: 0.75rem;
+            color: #555;
+            flex: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .bookmark-delete-btn {
+            background: #f43f5e;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .bookmark-add-btn {
+            width: 100%;
+            padding: 10px;
+            background: #4ade80;
+            border: none;
+            border-radius: 6px;
+            color: #111;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 700;
+            margin-bottom: 20px;
+            margin-top: 4px;
+        }
+
         .save-bar {
             position: fixed;
             bottom: 0;
@@ -336,10 +417,7 @@
 </head>
 
 <body>
-
-
     <div id="toast"></div>
-
     <div class="header">
         <img src="logo.jpg" alt="logo" class="header-logo" />
         <h1>tabs<span>/tune</span></h1>
@@ -524,7 +602,6 @@
             <label class="toggle"><input type="checkbox" id="search-enabled" checked /><span
                     class="slider"></span></label>
         </div>
-
         <p class="setting-label">search.engine</p>
         <div class="btn-group" id="search-engine-group">
             <button class="option-btn active" data-value="google">google</button>
@@ -533,13 +610,11 @@
             <button class="option-btn" data-value="brave">brave</button>
             <button class="option-btn" data-value="yahoo">yahoo</button>
         </div>
-
         <p class="setting-label">search.placeholderText</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="search-placeholder" class="setting-input" placeholder="search ..." />
         </div>
-
         <div class="toggle-row">
             <div>
                 <p class="setting-label">search.recognizeLinks</p>
@@ -548,26 +623,41 @@
             <label class="toggle"><input type="checkbox" id="search-recognize-links" checked /><span
                     class="slider"></span></label>
         </div>
-
         <p class="setting-label">search.focusedBorderColor</p>
         <p class="setting-hint">color of search bar border when focused</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="search-border-color" class="setting-input" placeholder="#4ade80" />
         </div>
-
         <p class="setting-label">search.textColor</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="search-text-color" class="setting-input" placeholder="#ffffff" />
         </div>
-
         <p class="setting-label">search.searchIconColor</p>
         <p class="setting-hint">changes the → arrow color</p>
         <div class="input-wrapper">
             <span class="input-prefix">&gt;</span>
             <input type="text" id="search-icon-color" class="setting-input" placeholder="#4ade80" />
         </div>
+    </div>
+
+    <!-- bookmarks -->
+    <div class="section">
+        <div class="section-title">bookmarks</div>
+        <p class="setting-label">bookmarks.add</p>
+        <p class="setting-hint">tip: ctrl+click or middle-click to open in a new tab</p>
+        <div class="input-wrapper" style="margin-top:12px;margin-bottom:8px">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="bm-name" class="setting-input" placeholder="name (e.g. github)" />
+        </div>
+        <div class="input-wrapper" style="margin-top:0;margin-bottom:12px">
+            <span class="input-prefix">&gt;</span>
+            <input type="text" id="bm-url" class="setting-input" placeholder="url (e.g. https://github.com)" />
+        </div>
+        <button class="bookmark-add-btn" id="bm-add-btn">+ add bookmark</button>
+        <p class="setting-label">bookmarks.list</p>
+        <div class="bookmark-list" id="bookmark-list"></div>
     </div>
 
     <div class="save-bar">
