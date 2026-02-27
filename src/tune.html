@@ -1,715 +1,847 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="logo-r.ico" />
     <title>Tune</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            background: #111;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 100vh;
-            padding: 48px 0 120px;
-        }
+      body {
+        background: #111;
+        color: #fff;
+        font-family: "JetBrains Mono", monospace;
+        min-height: 100vh;
+        padding: 48px 0 120px;
+      }
 
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
+      .header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
 
-        .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
-        }
+      .header h1 {
+        font-size: 2rem;
+        font-weight: 700;
+      }
 
-        .header h1 span {
-            color: #4ade80;
-        }
+      .header h1 span {
+        color: #4ade80;
+      }
 
-        .header-logo {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            border-radius: 40px;
-            margin-bottom: 12px;
-        }
+      .header-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 40px;
+        margin-bottom: 12px;
+      }
 
-        .header-links {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            justify-content: center;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            color: #666;
-        }
+      .header-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+        font-size: 0.8rem;
+        margin-top: 8px;
+        color: #666;
+      }
 
-        .header-links a {
-            color: #4ade80;
-            text-decoration: none;
-        }
+      .header-links a {
+        color: #4ade80;
+        text-decoration: none;
+      }
 
-        .header-links a:hover {
-            text-decoration: underline;
-        }
+      .header-links a:hover {
+        text-decoration: underline;
+      }
 
-        .header-links span {
-            color: #444;
-        }
+      .header-links span {
+        color: #444;
+      }
 
-        .section {
-            max-width: 640px;
-            margin: 0 auto 40px;
-            padding: 0 24px;
-        }
+      .section {
+        max-width: 640px;
+        margin: 0 auto 40px;
+        padding: 0 24px;
+      }
 
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #888;
-            font-size: 0.8rem;
-            margin-bottom: 24px;
-        }
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #888;
+        font-size: 0.8rem;
+        margin-bottom: 24px;
+      }
 
-        .section-title::before,
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #333;
-        }
+      .section-title::before,
+      .section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #333;
+      }
 
-        .setting-label {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            color: #fff;
-        }
+      .setting-label {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+        color: #fff;
+      }
 
-        .setting-hint {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 4px;
-            margin-bottom: 12px;
-        }
+      .setting-hint {
+        font-size: 0.75rem;
+        color: #666;
+        margin-top: 4px;
+        margin-bottom: 12px;
+      }
 
-        .input-wrapper {
-            display: flex;
-            align-items: center;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 10px 12px;
-            margin-bottom: 20px;
-            margin-top: 12px;
-        }
+      .input-wrapper {
+        display: flex;
+        align-items: center;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        margin-top: 12px;
+      }
 
-        .input-prefix {
-            color: #4ade80;
-            margin-right: 10px;
-            font-size: 0.85rem;
-        }
+      .input-prefix {
+        color: #4ade80;
+        margin-right: 10px;
+        font-size: 0.85rem;
+      }
 
-        .setting-input {
-            background: none;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            width: 100%;
-        }
+      .setting-input {
+        background: none;
+        border: none;
+        outline: none;
+        color: #fff;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        width: 100%;
+      }
 
-        .toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
 
-        .toggle {
-            position: relative;
-            width: 44px;
-            height: 24px;
-            flex-shrink: 0;
-        }
+      .toggle {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        flex-shrink: 0;
+      }
 
-        .toggle input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+      .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
 
-        .slider {
-            position: absolute;
-            inset: 0;
-            background: #333;
-            border-radius: 999px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
+      .slider {
+        position: absolute;
+        inset: 0;
+        background: #333;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
 
-        .slider::before {
-            content: '';
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            left: 3px;
-            top: 3px;
-            background: #fff;
-            border-radius: 50%;
-            transition: transform 0.2s;
-        }
+      .slider::before {
+        content: "";
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: transform 0.2s;
+      }
 
-        .toggle input:checked+.slider {
-            background: #4ade80;
-        }
+      .toggle input:checked + .slider {
+        background: #4ade80;
+      }
 
-        .toggle input:checked+.slider::before {
-            transform: translateX(20px);
-        }
+      .toggle input:checked + .slider::before {
+        transform: translateX(20px);
+      }
 
-        .btn-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 20px;
-        }
+      .btn-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
 
-        .option-btn {
-            padding: 10px;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-        }
+      .option-btn {
+        padding: 10px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        color: #fff;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
 
-        .option-btn.active {
-            background: #4ade80;
-            border-color: #4ade80;
-            color: #111;
-        }
+      .option-btn.active {
+        background: #4ade80;
+        border-color: #4ade80;
+        color: #111;
+      }
 
-        .favicon-upload-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-            margin-bottom: 12px;
-        }
+      .favicon-upload-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        margin-bottom: 12px;
+      }
 
-        .favicon-upload-btn {
-            background: #06b6d4;
-            color: #111;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            cursor: pointer;
-            white-space: nowrap;
-        }
+      .favicon-upload-btn {
+        background: #06b6d4;
+        color: #111;
+        padding: 8px 14px;
+        border-radius: 6px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
 
-        .favicon-upload-btn input {
-            display: none;
-        }
+      .favicon-upload-btn input {
+        display: none;
+      }
 
-        #favicon-filename {
-            font-size: 0.8rem;
-            color: #888;
-        }
+      #favicon-filename {
+        font-size: 0.8rem;
+        color: #888;
+      }
 
-        .favicon-reset-btn {
-            margin-left: auto;
-            background: #f43f5e;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
+      .favicon-reset-btn {
+        margin-left: auto;
+        background: #f43f5e;
+        color: #fff;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.8rem;
+        cursor: pointer;
+      }
 
-        .favicon-preview {
-            width: 48px;
-            height: 48px;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 8px;
-            color: #555;
-            font-size: 1.2rem;
-        }
+      .favicon-preview {
+        width: 48px;
+        height: 48px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8px;
+        color: #555;
+        font-size: 1.2rem;
+      }
 
-        .favicon-preview img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-        }
+      .favicon-preview img {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+      }
 
-        .wallpaper-preview {
-            width: 100%;
-            height: 160px;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 0.8rem;
-        }
+      .wallpaper-preview {
+        width: 100%;
+        height: 160px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #555;
+        font-size: 0.8rem;
+      }
 
-        .wallpaper-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      .wallpaper-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-        /* bookmarks */
-        .bookmark-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 16px;
-            margin-top: 12px;
-        }
+      /* bookmarks */
+      .bookmark-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+        margin-top: 12px;
+      }
 
-        .bookmark-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 10px 12px;
-        }
+      .bookmark-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 6px;
+        padding: 10px 12px;
+      }
 
-        .bookmark-item-favicon {
-            width: 18px;
-            height: 18px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
+      .bookmark-item-favicon {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        flex-shrink: 0;
+      }
 
-        .bookmark-item-fallback {
-            width: 18px;
-            height: 18px;
-            border-radius: 4px;
-            background: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            color: #fff;
-            flex-shrink: 0;
-        }
+      .bookmark-item-fallback {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        background: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.65rem;
+        color: #fff;
+        flex-shrink: 0;
+      }
 
-        .bookmark-item-name {
-            flex: 1;
-            font-size: 0.85rem;
-            color: #fff;
-        }
+      .bookmark-item-name {
+        flex: 1;
+        font-size: 0.85rem;
+        color: #fff;
+      }
 
-        .bookmark-item-url {
-            font-size: 0.75rem;
-            color: #555;
-            flex: 2;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+      .bookmark-item-url {
+        font-size: 0.75rem;
+        color: #555;
+        flex: 2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-        .bookmark-delete-btn {
-            background: #f43f5e;
-            color: #fff;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
+      .bookmark-delete-btn {
+        background: #f43f5e;
+        color: #fff;
+        border: none;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.75rem;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
 
-        .bookmark-add-btn {
-            width: 100%;
-            padding: 10px;
-            background: #4ade80;
-            border: none;
-            border-radius: 6px;
-            color: #111;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: 700;
-            margin-bottom: 20px;
-            margin-top: 4px;
-        }
+      .bookmark-add-btn {
+        width: 100%;
+        padding: 10px;
+        background: #4ade80;
+        border: none;
+        border-radius: 6px;
+        color: #111;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        cursor: pointer;
+        font-weight: 700;
+        margin-bottom: 20px;
+        margin-top: 4px;
+      }
 
-        .save-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 16px 24px;
-            background: #111;
-            border-top: 1px solid #222;
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
+      .save-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 16px 24px;
+        background: #111;
+        border-top: 1px solid #222;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+      }
 
-        .btn {
-            padding: 10px 32px;
-            border: none;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
+      .btn {
+        padding: 10px 32px;
+        border: none;
+        border-radius: 6px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85rem;
+        cursor: pointer;
+      }
 
-        .btn-save {
-            background: #4ade80;
-            color: #111;
-            font-weight: 700;
-        }
+      .btn-save {
+        background: #4ade80;
+        color: #111;
+        font-weight: 700;
+      }
 
-        #toast {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: #1e1e1e;
-            border: 1px solid #4ade80;
-            color: #4ade80;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
+      #toast {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        background: #1e1e1e;
+        border: 1px solid #4ade80;
+        color: #4ade80;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
 
-        #toast.show {
-            opacity: 1;
-        }
+      #toast.show {
+        opacity: 1;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="toast"></div>
     <div class="header">
-        <img src="logo.jpg" alt="logo" class="header-logo" />
-        <h1>tabs<span>/tune</span></h1>
-        <div class="header-links">
-            <a href="https://github.com/vodkaesc/tabs" target="_blank">github</a>
-            <span>|</span>
-            <span>v1.0.0</span>
-        </div>
+      <img src="logo.jpg" alt="logo" class="header-logo" />
+      <h1>tabs<span>/tune</span></h1>
+      <div class="header-links">
+        <a href="https://github.com/vodkaesc/tabs" target="_blank">github</a>
+        <span>|</span>
+        <span>v1.0.0</span>
+      </div>
     </div>
 
     <!-- user -->
     <div class="section">
-        <div class="section-title">user</div>
-        <p class="setting-label">user.name</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="username" class="setting-input" placeholder="your name" />
-        </div>
+      <div class="section-title">user</div>
+      <p class="setting-label">user.name</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="username"
+          class="setting-input"
+          placeholder="your name"
+        />
+      </div>
     </div>
 
     <!-- title -->
     <div class="section">
-        <div class="section-title">title</div>
-        <p class="setting-label">title.defaultTitle</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="tab-title" class="setting-input" placeholder="tabs" />
+      <div class="section-title">title</div>
+      <p class="setting-label">title.defaultTitle</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="tab-title"
+          class="setting-input"
+          placeholder="tabs"
+        />
+      </div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">title.dynamic.enabled</p>
+          <p class="setting-hint">
+            tab title changes to match what you type in the search bar
+          </p>
         </div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">title.dynamic.enabled</p>
-                <p class="setting-hint">tab title changes to match what you type in the search bar</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="dynamic-title" /><span class="slider"></span></label>
+        <label class="toggle"
+          ><input type="checkbox" id="dynamic-title" /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">title.effect</p>
+      <div class="btn-group" id="title-effect-group">
+        <button class="option-btn active" data-value="none">none</button>
+        <button class="option-btn" data-value="typewriter">typewriter</button>
+      </div>
+      <p class="setting-label">title.faviconType</p>
+      <div class="btn-group" id="favicon-type-group">
+        <button class="option-btn active" data-value="default">default</button>
+        <button class="option-btn" data-value="custom">custom</button>
+      </div>
+      <div id="custom-favicon-section" style="display: none">
+        <p class="setting-label">title.customFavicon</p>
+        <p class="setting-hint">
+          note: the customFavicon is not included when exporting configs due to
+          size
+        </p>
+        <div class="favicon-upload-row">
+          <label class="favicon-upload-btn">
+            <input type="file" id="favicon-upload" accept="image/*" />Browse...
+          </label>
+          <span id="favicon-filename">No file selected.</span>
+          <button class="favicon-reset-btn" id="favicon-reset">reset</button>
         </div>
-        <p class="setting-label">title.effect</p>
-        <div class="btn-group" id="title-effect-group">
-            <button class="option-btn active" data-value="none">none</button>
-            <button class="option-btn" data-value="typewriter">typewriter</button>
+        <p class="setting-hint">live preview</p>
+        <div class="favicon-preview">
+          <img id="favicon-preview-img" src="" alt="" style="display: none" />
+          <div id="favicon-preview-empty">⊘</div>
         </div>
-        <p class="setting-label">title.faviconType</p>
-        <div class="btn-group" id="favicon-type-group">
-            <button class="option-btn active" data-value="default">default</button>
-            <button class="option-btn" data-value="custom">custom</button>
-        </div>
-        <div id="custom-favicon-section" style="display:none">
-            <p class="setting-label">title.customFavicon</p>
-            <p class="setting-hint">note: the customFavicon is not included when exporting configs due to size</p>
-            <div class="favicon-upload-row">
-                <label class="favicon-upload-btn">
-                    <input type="file" id="favicon-upload" accept="image/*" />Browse...
-                </label>
-                <span id="favicon-filename">No file selected.</span>
-                <button class="favicon-reset-btn" id="favicon-reset">reset</button>
-            </div>
-            <p class="setting-hint">live preview</p>
-            <div class="favicon-preview">
-                <img id="favicon-preview-img" src="" alt="" style="display:none" />
-                <div id="favicon-preview-empty">⊘</div>
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- message -->
     <div class="section">
-        <div class="section-title">message</div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">message.enabled</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="message-enabled" checked /><span
-                    class="slider"></span></label>
+      <div class="section-title">message</div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">message.enabled</p>
         </div>
-        <p class="setting-label">message.font.type</p>
-        <div class="btn-group" id="message-font-group">
-            <button class="option-btn active" data-value="default">default</button>
-            <button class="option-btn" data-value="custom">custom</button>
-        </div>
-        <div id="custom-font-section" style="display:none">
-            <p class="setting-label">message.font.family</p>
-            <p class="setting-hint">enter any Google Fonts font name e.g. "Roboto", "Playfair Display"</p>
-            <div class="input-wrapper">
-                <span class="input-prefix">&gt;</span>
-                <input type="text" id="message-font" class="setting-input" placeholder="Roboto" />
-            </div>
-        </div>
-        <p class="setting-label">message.textColor</p>
+        <label class="toggle"
+          ><input type="checkbox" id="message-enabled" checked /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">message.font.type</p>
+      <div class="btn-group" id="message-font-group">
+        <button class="option-btn active" data-value="default">default</button>
+        <button class="option-btn" data-value="custom">custom</button>
+      </div>
+      <div id="custom-font-section" style="display: none">
+        <p class="setting-label">message.font.family</p>
+        <p class="setting-hint">
+          enter any Google Fonts font name e.g. "Roboto", "Playfair Display"
+        </p>
         <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="message-color" class="setting-input" placeholder="#ffffff" />
+          <span class="input-prefix">&gt;</span>
+          <input
+            type="text"
+            id="message-font"
+            class="setting-input"
+            placeholder="Roboto"
+          />
         </div>
-        <p class="setting-label">message.textSize</p>
+      </div>
+      <p class="setting-label">message.textColor</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="message-color"
+          class="setting-input"
+          placeholder="#ffffff"
+        />
+      </div>
+      <p class="setting-label">message.textSize</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="number"
+          id="message-size"
+          class="setting-input"
+          placeholder="3.75"
+          step="0.25"
+          min="0.5"
+          max="10"
+        />
+      </div>
+      <p class="setting-label">message.type</p>
+      <div class="btn-group" id="message-type-group">
+        <button class="option-btn active" data-value="afternoon-morning">
+          afternoon-morning
+        </button>
+        <button class="option-btn" data-value="date">date</button>
+        <button class="option-btn" data-value="time-12">time-12</button>
+        <button class="option-btn" data-value="time-24">time-24</button>
+        <button class="option-btn" data-value="custom">custom</button>
+      </div>
+      <div id="custom-message-section" style="display: none">
+        <p class="setting-label">message.customText</p>
         <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="number" id="message-size" class="setting-input" placeholder="3.75" step="0.25" min="0.5"
-                max="10" />
+          <span class="input-prefix">&gt;</span>
+          <input
+            type="text"
+            id="message-custom-text"
+            class="setting-input"
+            placeholder="stay focused."
+          />
         </div>
-        <p class="setting-label">message.type</p>
-        <div class="btn-group" id="message-type-group">
-            <button class="option-btn active" data-value="afternoon-morning">afternoon-morning</button>
-            <button class="option-btn" data-value="date">date</button>
-            <button class="option-btn" data-value="time-12">time-12</button>
-            <button class="option-btn" data-value="time-24">time-24</button>
-            <button class="option-btn" data-value="custom">custom</button>
-        </div>
-        <div id="custom-message-section" style="display:none">
-            <p class="setting-label">message.customText</p>
-            <div class="input-wrapper">
-                <span class="input-prefix">&gt;</span>
-                <input type="text" id="message-custom-text" class="setting-input" placeholder="stay focused." />
-            </div>
-        </div>
+      </div>
     </div>
 
     <!-- wallpaper -->
     <div class="section">
-        <div class="section-title">wallpaper</div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">wallpaper.enabled</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="wallpaper-enabled" checked /><span
-                    class="slider"></span></label>
+      <div class="section-title">wallpaper</div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">wallpaper.enabled</p>
         </div>
-        <p class="setting-label">wallpaper.type</p>
-        <div class="btn-group" id="wallpaper-type-group">
-            <button class="option-btn active" data-value="default">default</button>
-            <button class="option-btn" data-value="solid-color">solid-color</button>
-            <button class="option-btn" data-value="url">url</button>
-            <button class="option-btn" data-value="file-upload">file-upload</button>
-        </div>
-        <div id="wallpaper-solid-section" style="display:none">
-            <p class="setting-label">wallpaper.color</p>
-            <div class="input-wrapper">
-                <span class="input-prefix">&gt;</span>
-                <input type="text" id="wallpaper-color" class="setting-input" placeholder="#000000" />
-            </div>
-        </div>
-        <div id="wallpaper-url-section" style="display:none">
-            <p class="setting-label">wallpaper.url</p>
-            <div class="input-wrapper">
-                <span class="input-prefix">&gt;</span>
-                <input type="text" id="wallpaper-url" class="setting-input" placeholder="https://..." />
-            </div>
-        </div>
-        <div id="wallpaper-file-section" style="display:none">
-            <p class="setting-label">wallpaper.file</p>
-            <p class="setting-hint">note: wallpaper is stored locally due to size</p>
-            <div class="favicon-upload-row">
-                <label class="favicon-upload-btn">
-                    <input type="file" id="wallpaper-upload" accept="image/*" />Browse...
-                </label>
-                <span id="wallpaper-filename">No file selected.</span>
-                <button class="favicon-reset-btn" id="wallpaper-reset">reset</button>
-            </div>
-        </div>
-        <div class="wallpaper-preview" id="wallpaper-preview">
-            <span id="wallpaper-preview-empty">no wallpaper</span>
-            <img id="wallpaper-preview-img" src="" alt="" style="display:none" />
-        </div>
-        <p class="setting-label">wallpaper.filters.brightness</p>
+        <label class="toggle"
+          ><input type="checkbox" id="wallpaper-enabled" checked /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">wallpaper.type</p>
+      <div class="btn-group" id="wallpaper-type-group">
+        <button class="option-btn active" data-value="default">default</button>
+        <button class="option-btn" data-value="solid-color">solid-color</button>
+        <button class="option-btn" data-value="url">url</button>
+        <button class="option-btn" data-value="file-upload">file-upload</button>
+      </div>
+      <div id="wallpaper-solid-section" style="display: none">
+        <p class="setting-label">wallpaper.color</p>
         <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="number" id="wallpaper-brightness" class="setting-input" placeholder="1" step="0.1" min="0"
-                max="3" />
+          <span class="input-prefix">&gt;</span>
+          <input
+            type="text"
+            id="wallpaper-color"
+            class="setting-input"
+            placeholder="#000000"
+          />
         </div>
-        <p class="setting-label">wallpaper.filters.blur</p>
+      </div>
+      <div id="wallpaper-url-section" style="display: none">
+        <p class="setting-label">wallpaper.url</p>
         <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="number" id="wallpaper-blur" class="setting-input" placeholder="0" step="1" min="0" max="20" />
+          <span class="input-prefix">&gt;</span>
+          <input
+            type="text"
+            id="wallpaper-url"
+            class="setting-input"
+            placeholder="https://..."
+          />
         </div>
+      </div>
+      <div id="wallpaper-file-section" style="display: none">
+        <p class="setting-label">wallpaper.file</p>
+        <p class="setting-hint">
+          note: wallpaper is stored locally due to size
+        </p>
+        <div class="favicon-upload-row">
+          <label class="favicon-upload-btn">
+            <input
+              type="file"
+              id="wallpaper-upload"
+              accept="image/*"
+            />Browse...
+          </label>
+          <span id="wallpaper-filename">No file selected.</span>
+          <button class="favicon-reset-btn" id="wallpaper-reset">reset</button>
+        </div>
+      </div>
+      <div class="wallpaper-preview" id="wallpaper-preview">
+        <span id="wallpaper-preview-empty">no wallpaper</span>
+        <img id="wallpaper-preview-img" src="" alt="" style="display: none" />
+      </div>
+      <p class="setting-label">wallpaper.filters.brightness</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="number"
+          id="wallpaper-brightness"
+          class="setting-input"
+          placeholder="1"
+          step="0.1"
+          min="0"
+          max="3"
+        />
+      </div>
+      <p class="setting-label">wallpaper.filters.blur</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="number"
+          id="wallpaper-blur"
+          class="setting-input"
+          placeholder="0"
+          step="1"
+          min="0"
+          max="20"
+        />
+      </div>
     </div>
 
     <!-- search -->
     <div class="section">
-        <div class="section-title">search</div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">search.enabled</p>
-                <p class="setting-hint">tip: press Ctrl+Enter to open search in a new tab</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="search-enabled" checked /><span
-                    class="slider"></span></label>
+      <div class="section-title">search</div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">search.enabled</p>
+          <p class="setting-hint">
+            tip: press Ctrl+Enter to open search in a new tab
+          </p>
         </div>
-        <p class="setting-label">search.engine</p>
-        <div class="btn-group" id="search-engine-group">
-            <button class="option-btn active" data-value="google">google</button>
-            <button class="option-btn" data-value="duckduckgo">duckduckgo</button>
-            <button class="option-btn" data-value="bing">bing</button>
-            <button class="option-btn" data-value="brave">brave</button>
-            <button class="option-btn" data-value="yahoo">yahoo</button>
+        <label class="toggle"
+          ><input type="checkbox" id="search-enabled" checked /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">search.engine</p>
+      <div class="btn-group" id="search-engine-group">
+        <button class="option-btn active" data-value="google">google</button>
+        <button class="option-btn" data-value="duckduckgo">duckduckgo</button>
+        <button class="option-btn" data-value="bing">bing</button>
+        <button class="option-btn" data-value="brave">brave</button>
+        <button class="option-btn" data-value="yahoo">yahoo</button>
+      </div>
+      <p class="setting-label">search.placeholderText</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="search-placeholder"
+          class="setting-input"
+          placeholder="search ..."
+        />
+      </div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">search.recognizeLinks</p>
+          <p class="setting-hint">
+            typing a URL navigates directly instead of searching
+          </p>
         </div>
-        <p class="setting-label">search.placeholderText</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="search-placeholder" class="setting-input" placeholder="search ..." />
-        </div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">search.recognizeLinks</p>
-                <p class="setting-hint">typing a URL navigates directly instead of searching</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="search-recognize-links" checked /><span
-                    class="slider"></span></label>
-        </div>
-        <p class="setting-label">search.focusedBorderColor</p>
-        <p class="setting-hint">color of search bar border when focused</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="search-border-color" class="setting-input" placeholder="#4ade80" />
-        </div>
-        <p class="setting-label">search.textColor</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="search-text-color" class="setting-input" placeholder="#ffffff" />
-        </div>
-        <p class="setting-label">search.searchIconColor</p>
-        <p class="setting-hint">changes the → arrow color</p>
-        <div class="input-wrapper">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="search-icon-color" class="setting-input" placeholder="#4ade80" />
-        </div>
+        <label class="toggle"
+          ><input type="checkbox" id="search-recognize-links" checked /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">search.focusedBorderColor</p>
+      <p class="setting-hint">color of search bar border when focused</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="search-border-color"
+          class="setting-input"
+          placeholder="#4ade80"
+        />
+      </div>
+      <p class="setting-label">search.textColor</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="search-text-color"
+          class="setting-input"
+          placeholder="#ffffff"
+        />
+      </div>
+      <p class="setting-label">search.searchIconColor</p>
+      <p class="setting-hint">changes the → arrow color</p>
+      <div class="input-wrapper">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="search-icon-color"
+          class="setting-input"
+          placeholder="#4ade80"
+        />
+      </div>
     </div>
-
-
 
     <!-- animations -->
     <div class="section">
-        <div class="section-title">animations</div>
-        <div class="toggle-row">
-            <div>
-                <p class="setting-label">animations.enabled</p>
-            </div>
-            <label class="toggle"><input type="checkbox" id="anim-enabled" checked /><span
-                    class="slider"></span></label>
+      <div class="section-title">animations</div>
+      <div class="toggle-row">
+        <div>
+          <p class="setting-label">animations.enabled</p>
         </div>
-        <p class="setting-label">animations.bookmarkTiming</p>
-        <div class="btn-group" id="anim-timing-group">
-            <button class="option-btn active" data-value="left">left</button>
-            <button class="option-btn" data-value="right">right</button>
-            <button class="option-btn" data-value="uniform">uniform</button>
-        </div>
-        <p class="setting-label">animations.initialType</p>
-        <div class="btn-group" id="anim-initial-group">
-            <button class="option-btn" data-value="down-bouncy">down-bouncy</button>
-            <button class="option-btn" data-value="down-smooth">down-smooth</button>
-            <button class="option-btn" data-value="down-fall">down-fall</button>
-            <button class="option-btn active" data-value="up-bouncy">up-bouncy</button>
-            <button class="option-btn" data-value="up-smooth">up-smooth</button>
-            <button class="option-btn" data-value="grow-scale">grow-scale</button>
-            <button class="option-btn" data-value="fly-left">fly-left</button>
-            <button class="option-btn" data-value="fly-right">fly-right</button>
-        </div>
-        <p class="setting-label">animations.searchType</p>
-        <div class="btn-group" id="anim-search-group">
-            <button class="option-btn active" data-value="page-shrink">page-shrink</button>
-            <button class="option-btn" data-value="page-scale">page-scale</button>
-            <button class="option-btn" data-value="page-up">page-up</button>
-            <button class="option-btn" data-value="page-down">page-down</button>
-        </div>
-        <p class="setting-label">animations.bookmarkType</p>
-        <div class="btn-group" id="anim-bookmark-group">
-            <button class="option-btn" data-value="page-shrink">page-shrink</button>
-            <button class="option-btn" data-value="page-scale">page-scale</button>
-            <button class="option-btn active" data-value="page-up">page-up</button>
-            <button class="option-btn" data-value="page-down">page-down</button>
-        </div>
+        <label class="toggle"
+          ><input type="checkbox" id="anim-enabled" checked /><span
+            class="slider"
+          ></span
+        ></label>
+      </div>
+      <p class="setting-label">animations.bookmarkTiming</p>
+      <div class="btn-group" id="anim-timing-group">
+        <button class="option-btn active" data-value="left">left</button>
+        <button class="option-btn" data-value="right">right</button>
+        <button class="option-btn" data-value="uniform">uniform</button>
+      </div>
+      <p class="setting-label">animations.initialType</p>
+      <div class="btn-group" id="anim-initial-group">
+        <button class="option-btn" data-value="down-bouncy">down-bouncy</button>
+        <button class="option-btn" data-value="down-smooth">down-smooth</button>
+        <button class="option-btn" data-value="down-fall">down-fall</button>
+        <button class="option-btn active" data-value="up-bouncy">
+          up-bouncy
+        </button>
+        <button class="option-btn" data-value="up-smooth">up-smooth</button>
+        <button class="option-btn" data-value="grow-scale">grow-scale</button>
+        <button class="option-btn" data-value="fly-left">fly-left</button>
+        <button class="option-btn" data-value="fly-right">fly-right</button>
+      </div>
+      <p class="setting-label">animations.searchType</p>
+      <div class="btn-group" id="anim-search-group">
+        <button class="option-btn active" data-value="page-shrink">
+          page-shrink
+        </button>
+        <button class="option-btn" data-value="page-scale">page-scale</button>
+        <button class="option-btn" data-value="page-up">page-up</button>
+        <button class="option-btn" data-value="page-down">page-down</button>
+      </div>
+      <p class="setting-label">animations.bookmarkType</p>
+      <div class="btn-group" id="anim-bookmark-group">
+        <button class="option-btn" data-value="page-shrink">page-shrink</button>
+        <button class="option-btn" data-value="page-scale">page-scale</button>
+        <button class="option-btn active" data-value="page-up">page-up</button>
+        <button class="option-btn" data-value="page-down">page-down</button>
+      </div>
     </div>
 
     <!-- bookmarks -->
     <div class="section">
-        <div class="section-title">bookmarks</div>
-        <p class="setting-label">bookmarks.add</p>
-        <p class="setting-hint">tip: ctrl+click or middle-click to open in a new tab</p>
-        <div class="input-wrapper" style="margin-top:12px;margin-bottom:8px">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="bm-name" class="setting-input" placeholder="name (e.g. github)" />
-        </div>
-        <div class="input-wrapper" style="margin-top:0;margin-bottom:12px">
-            <span class="input-prefix">&gt;</span>
-            <input type="text" id="bm-url" class="setting-input" placeholder="url (e.g. https://github.com)" />
-        </div>
-        <button class="bookmark-add-btn" id="bm-add-btn">+ add bookmark</button>
-        <p class="setting-label">bookmarks.list</p>
-        <div class="bookmark-list" id="bookmark-list"></div>
+      <div class="section-title">bookmarks</div>
+      <p class="setting-label">bookmarks.add</p>
+      <p class="setting-hint">
+        tip: ctrl+click or middle-click to open in a new tab
+      </p>
+      <div class="input-wrapper" style="margin-top: 12px; margin-bottom: 8px">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="bm-name"
+          class="setting-input"
+          placeholder="name (e.g. github)"
+        />
+      </div>
+      <div class="input-wrapper" style="margin-top: 0; margin-bottom: 12px">
+        <span class="input-prefix">&gt;</span>
+        <input
+          type="text"
+          id="bm-url"
+          class="setting-input"
+          placeholder="url (e.g. https://github.com)"
+        />
+      </div>
+      <button class="bookmark-add-btn" id="bm-add-btn">+ add bookmark</button>
+      <p class="setting-label">bookmarks.list</p>
+      <div class="bookmark-list" id="bookmark-list"></div>
     </div>
 
     <div class="save-bar">
-        <button class="btn btn-save">save</button>
+      <button class="btn btn-save">save</button>
     </div>
 
     <script src="tune.js"></script>
-</body>
-
+  </body>
 </html>

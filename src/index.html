@@ -1,397 +1,411 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>tabs</title>
     <link id="favicon" rel="icon" href="logo-r.ico" />
     <script src="preinit.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #111;
+        color: #fff;
+        font-family: "JetBrains Mono", monospace;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        text-align: center;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+      }
+
+      #app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 100px;
+      }
+
+      .search-wrapper {
+        display: flex;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 8px;
+        padding: 12px 16px;
+        width: 480px;
+        gap: 12px;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition: border-color 0.2s;
+      }
+
+      .search-wrapper:focus-within {
+        border-color: var(--search-focus-color, #4ade80);
+      }
+
+      .search-arrow {
+        color: var(--search-icon-color, #4ade80);
+        font-size: 1rem;
+      }
+
+      #search {
+        background: none;
+        border: none;
+        outline: none;
+        color: var(--search-text-color, #fff);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.95rem;
+        width: 100%;
+      }
+
+      #search::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* bookmarks */
+      .bookmarks-row {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        max-width: 560px;
+      }
+
+      .bookmark-tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 72px;
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        cursor: pointer;
+        text-decoration: none;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        transition:
+          background 0.2s,
+          transform 0.1s;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .bookmark-tile:hover {
+        background: rgba(0, 0, 0, 0.65);
+        transform: translateY(-2px);
+      }
+
+      .bookmark-tile img {
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+      }
+
+      .bookmark-tile .bm-fallback {
+        font-size: 1.2rem;
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .bookmark-tile .bm-name {
+        font-size: 0.6rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-top: 4px;
+        text-align: center;
+        max-width: 64px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      #tune-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s;
+      }
+
+      #tune-btn:hover {
+        opacity: 1;
+      }
+
+      /* ── initial animations ── */
+      @keyframes down-bouncy {
+        0% {
+          opacity: 0;
+          transform: translateY(-40px);
         }
 
-        body {
-            background: #111;
-            color: #fff;
-            font-family: 'JetBrains Mono', monospace;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        60% {
+          transform: translateY(8px);
         }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: center;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+        80% {
+          transform: translateY(-4px);
         }
 
-        #app {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 24px;
-            margin-bottom: 100px;
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes down-smooth {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
         }
 
-        .search-wrapper {
-            display: flex;
-            align-items: center;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 8px;
-            padding: 12px 16px;
-            width: 480px;
-            gap: 12px;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: border-color 0.2s;
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes down-fall {
+        from {
+          opacity: 0;
+          transform: translateY(-60px);
         }
 
-        .search-wrapper:focus-within {
-            border-color: var(--search-focus-color, #4ade80);
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes up-bouncy {
+        0% {
+          opacity: 0;
+          transform: translateY(40px);
         }
 
-        .search-arrow {
-            color: var(--search-icon-color, #4ade80);
-            font-size: 1rem;
+        60% {
+          transform: translateY(-8px);
         }
 
-        #search {
-            background: none;
-            border: none;
-            outline: none;
-            color: var(--search-text-color, #fff);
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.95rem;
-            width: 100%;
+        80% {
+          transform: translateY(4px);
         }
 
-        #search::placeholder {
-            color: rgba(255, 255, 255, 0.3);
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes up-smooth {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
 
-        /* bookmarks */
-        .bookmarks-row {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 560px;
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes grow-scale {
+        from {
+          opacity: 0;
+          transform: scale(0.7);
         }
 
-        .bookmark-tile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 72px;
-            height: 72px;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            cursor: pointer;
-            text-decoration: none;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            transition: background 0.2s, transform 0.1s;
-            overflow: hidden;
-            position: relative;
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes fly-left {
+        from {
+          opacity: 0;
+          transform: translateX(-60px);
         }
 
-        .bookmark-tile:hover {
-            background: rgba(0, 0, 0, 0.65);
-            transform: translateY(-2px);
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes fly-right {
+        from {
+          opacity: 0;
+          transform: translateX(60px);
         }
 
-        .bookmark-tile img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .anim-down-bouncy {
+        animation: down-bouncy 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+
+      .anim-down-smooth {
+        animation: down-smooth 0.5s ease both;
+      }
+
+      .anim-down-fall {
+        animation: down-fall 0.4s ease both;
+      }
+
+      .anim-up-bouncy {
+        animation: up-bouncy 0.6s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+
+      .anim-up-smooth {
+        animation: up-smooth 0.5s ease both;
+      }
+
+      .anim-grow-scale {
+        animation: grow-scale 0.4s ease both;
+      }
+
+      .anim-fly-left {
+        animation: fly-left 0.5s ease both;
+      }
+
+      .anim-fly-right {
+        animation: fly-right 0.5s ease both;
+      }
+
+      /* search animations */
+      @keyframes page-shrink {
+        from {
+          opacity: 0;
+          transform: scale(0.85);
         }
 
-        .bookmark-tile .bm-fallback {
-            font-size: 1.2rem;
-            color: #fff;
-            font-weight: 700;
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes page-scale {
+        from {
+          opacity: 0;
+          transform: scale(1.1);
         }
 
-        .bookmark-tile .bm-name {
-            font-size: 0.6rem;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 4px;
-            text-align: center;
-            max-width: 64px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes page-up {
+        from {
+          opacity: 0;
+          transform: translateY(40px);
         }
 
-        #tune-btn {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            opacity: 0.5;
-            transition: opacity 0.2s;
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes page-down {
+        from {
+          opacity: 0;
+          transform: translateY(-40px);
         }
 
-        #tune-btn:hover {
-            opacity: 1;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        /* ── initial animations ── */
-        @keyframes down-bouncy {
-            0% {
-                opacity: 0;
-                transform: translateY(-40px)
-            }
+      .sanim-page-shrink {
+        animation: page-shrink 0.45s ease both;
+      }
 
-            60% {
-                transform: translateY(8px)
-            }
+      .sanim-page-scale {
+        animation: page-scale 0.45s ease both;
+      }
 
-            80% {
-                transform: translateY(-4px)
-            }
+      .sanim-page-up {
+        animation: page-up 0.45s ease both;
+      }
 
-            100% {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
+      .sanim-page-down {
+        animation: page-down 0.45s ease both;
+      }
 
-        @keyframes down-smooth {
-            from {
-                opacity: 0;
-                transform: translateY(-30px)
-            }
+      /* bookmark tile animations */
+      .banim-page-shrink {
+        animation: page-shrink 0.4s ease both;
+      }
 
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
+      .banim-page-scale {
+        animation: page-scale 0.4s ease both;
+      }
 
-        @keyframes down-fall {
-            from {
-                opacity: 0;
-                transform: translateY(-60px)
-            }
+      .banim-page-up {
+        animation: page-up 0.4s ease both;
+      }
 
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        @keyframes up-bouncy {
-            0% {
-                opacity: 0;
-                transform: translateY(40px)
-            }
-
-            60% {
-                transform: translateY(-8px)
-            }
-
-            80% {
-                transform: translateY(4px)
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        @keyframes up-smooth {
-            from {
-                opacity: 0;
-                transform: translateY(30px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        @keyframes grow-scale {
-            from {
-                opacity: 0;
-                transform: scale(0.7)
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1)
-            }
-        }
-
-        @keyframes fly-left {
-            from {
-                opacity: 0;
-                transform: translateX(-60px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0)
-            }
-        }
-
-        @keyframes fly-right {
-            from {
-                opacity: 0;
-                transform: translateX(60px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0)
-            }
-        }
-
-        .anim-down-bouncy {
-            animation: down-bouncy 0.6s cubic-bezier(.36, .07, .19, .97) both;
-        }
-
-        .anim-down-smooth {
-            animation: down-smooth 0.5s ease both;
-        }
-
-        .anim-down-fall {
-            animation: down-fall 0.4s ease both;
-        }
-
-        .anim-up-bouncy {
-            animation: up-bouncy 0.6s cubic-bezier(.36, .07, .19, .97) both;
-        }
-
-        .anim-up-smooth {
-            animation: up-smooth 0.5s ease both;
-        }
-
-        .anim-grow-scale {
-            animation: grow-scale 0.4s ease both;
-        }
-
-        .anim-fly-left {
-            animation: fly-left 0.5s ease both;
-        }
-
-        .anim-fly-right {
-            animation: fly-right 0.5s ease both;
-        }
-
-        /* search animations */
-        @keyframes page-shrink {
-            from {
-                opacity: 0;
-                transform: scale(0.85)
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1)
-            }
-        }
-
-        @keyframes page-scale {
-            from {
-                opacity: 0;
-                transform: scale(1.1)
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1)
-            }
-        }
-
-        @keyframes page-up {
-            from {
-                opacity: 0;
-                transform: translateY(40px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        @keyframes page-down {
-            from {
-                opacity: 0;
-                transform: translateY(-40px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        .sanim-page-shrink {
-            animation: page-shrink 0.45s ease both;
-        }
-
-        .sanim-page-scale {
-            animation: page-scale 0.45s ease both;
-        }
-
-        .sanim-page-up {
-            animation: page-up 0.45s ease both;
-        }
-
-        .sanim-page-down {
-            animation: page-down 0.45s ease both;
-        }
-
-        /* bookmark tile animations */
-        .banim-page-shrink {
-            animation: page-shrink 0.4s ease both;
-        }
-
-        .banim-page-scale {
-            animation: page-scale 0.4s ease both;
-        }
-
-        .banim-page-up {
-            animation: page-up 0.4s ease both;
-        }
-
-        .banim-page-down {
-            animation: page-down 0.4s ease both;
-        }
+      .banim-page-down {
+        animation: page-down 0.4s ease both;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="app">
-        <h1 id="greeting"></h1>
-        <div class="search-wrapper" id="search-wrapper">
-            <span class="search-arrow" id="search-arrow">→</span>
-            <input type="text" id="search" placeholder="search ..." />
-        </div>
-        <div class="bookmarks-row" id="bookmarks-row"></div>
+      <h1 id="greeting"></h1>
+      <div class="search-wrapper" id="search-wrapper">
+        <span class="search-arrow" id="search-arrow">→</span>
+        <input type="text" id="search" placeholder="search ..." />
+      </div>
+      <div class="bookmarks-row" id="bookmarks-row"></div>
     </div>
     <a href="tune.html" id="tune-btn">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white"
-            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="12" cy="12" r="3" />
+        <path
+          d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06
                a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09
                A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83
                l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09
@@ -399,10 +413,10 @@
                l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09
                a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83
                l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09
-               a1.65 1.65 0 0 0-1.51 1z" />
-        </svg>
+               a1.65 1.65 0 0 0-1.51 1z"
+        />
+      </svg>
     </a>
     <script src="index.js"></script>
-</body>
-
+  </body>
 </html>
