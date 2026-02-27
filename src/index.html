@@ -97,7 +97,6 @@
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            border-top: none;
             cursor: pointer;
             text-decoration: none;
             backdrop-filter: blur(8px);
@@ -148,6 +147,233 @@
 
         #tune-btn:hover {
             opacity: 1;
+        }
+
+        /* ── initial animations ── */
+        @keyframes down-bouncy {
+            0% {
+                opacity: 0;
+                transform: translateY(-40px)
+            }
+
+            60% {
+                transform: translateY(8px)
+            }
+
+            80% {
+                transform: translateY(-4px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes down-smooth {
+            from {
+                opacity: 0;
+                transform: translateY(-30px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes down-fall {
+            from {
+                opacity: 0;
+                transform: translateY(-60px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes up-bouncy {
+            0% {
+                opacity: 0;
+                transform: translateY(40px)
+            }
+
+            60% {
+                transform: translateY(-8px)
+            }
+
+            80% {
+                transform: translateY(4px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes up-smooth {
+            from {
+                opacity: 0;
+                transform: translateY(30px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes grow-scale {
+            from {
+                opacity: 0;
+                transform: scale(0.7)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        @keyframes fly-left {
+            from {
+                opacity: 0;
+                transform: translateX(-60px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        @keyframes fly-right {
+            from {
+                opacity: 0;
+                transform: translateX(60px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0)
+            }
+        }
+
+        .anim-down-bouncy {
+            animation: down-bouncy 0.6s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        .anim-down-smooth {
+            animation: down-smooth 0.5s ease both;
+        }
+
+        .anim-down-fall {
+            animation: down-fall 0.4s ease both;
+        }
+
+        .anim-up-bouncy {
+            animation: up-bouncy 0.6s cubic-bezier(.36, .07, .19, .97) both;
+        }
+
+        .anim-up-smooth {
+            animation: up-smooth 0.5s ease both;
+        }
+
+        .anim-grow-scale {
+            animation: grow-scale 0.4s ease both;
+        }
+
+        .anim-fly-left {
+            animation: fly-left 0.5s ease both;
+        }
+
+        .anim-fly-right {
+            animation: fly-right 0.5s ease both;
+        }
+
+        /* search animations */
+        @keyframes page-shrink {
+            from {
+                opacity: 0;
+                transform: scale(0.85)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        @keyframes page-scale {
+            from {
+                opacity: 0;
+                transform: scale(1.1)
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1)
+            }
+        }
+
+        @keyframes page-up {
+            from {
+                opacity: 0;
+                transform: translateY(40px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes page-down {
+            from {
+                opacity: 0;
+                transform: translateY(-40px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .sanim-page-shrink {
+            animation: page-shrink 0.45s ease both;
+        }
+
+        .sanim-page-scale {
+            animation: page-scale 0.45s ease both;
+        }
+
+        .sanim-page-up {
+            animation: page-up 0.45s ease both;
+        }
+
+        .sanim-page-down {
+            animation: page-down 0.45s ease both;
+        }
+
+        /* bookmark tile animations */
+        .banim-page-shrink {
+            animation: page-shrink 0.4s ease both;
+        }
+
+        .banim-page-scale {
+            animation: page-scale 0.4s ease both;
+        }
+
+        .banim-page-up {
+            animation: page-up 0.4s ease both;
+        }
+
+        .banim-page-down {
+            animation: page-down 0.4s ease both;
         }
     </style>
 </head>

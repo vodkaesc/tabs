@@ -39,6 +39,11 @@ const searchRecognizeLinksToggle = document.getElementById("search-recognize-lin
 const searchBorderColorInput = document.getElementById("search-border-color");
 const searchTextColorInput = document.getElementById("search-text-color");
 const searchIconColorInput = document.getElementById("search-icon-color");
+const animEnabledToggle = document.getElementById("anim-enabled");
+const animTimingBtns = document.querySelectorAll("#anim-timing-group .option-btn");
+const animInitialBtns = document.querySelectorAll("#anim-initial-group .option-btn");
+const animSearchBtns = document.querySelectorAll("#anim-search-group .option-btn");
+const animBookmarkBtns = document.querySelectorAll("#anim-bookmark-group .option-btn");
 const bmNameInput = document.getElementById("bm-name");
 const bmUrlInput = document.getElementById("bm-url");
 const bmAddBtn = document.getElementById("bm-add-btn");
@@ -50,20 +55,30 @@ let selectedMessageFont = "default";
 let selectedMessageType = "afternoon-morning";
 let selectedWallpaperType = "default";
 let selectedSearchEngine = "google";
+let selectedAnimTiming = "left";
+let selectedAnimInitial = "up-bouncy";
+let selectedAnimSearch = "page-shrink";
+let selectedAnimBookmark = "page-up";
 let faviconBase64 = null;
 let wallpaperBase64 = null;
 let bookmarks = [];
 
-// title effect buttons
-effectBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    effectBtns.forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    selectedEffect = btn.dataset.value;
+function makeBtnGroup(btns, getCurrent, setCurrent) {
+  btns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      btns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      setCurrent(btn.dataset.value);
+    });
   });
-});
+}
 
-// favicon type buttons
+makeBtnGroup(effectBtns, () => selectedEffect, v => selectedEffect = v);
+makeBtnGroup(animTimingBtns, () => selectedAnimTiming, v => selectedAnimTiming = v);
+makeBtnGroup(animInitialBtns, () => selectedAnimInitial, v => selectedAnimInitial = v);
+makeBtnGroup(animSearchBtns, () => selectedAnimSearch, v => selectedAnimSearch = v);
+makeBtnGroup(animBookmarkBtns, () => selectedAnimBookmark, v => selectedAnimBookmark = v);
+
 faviconTypeBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     faviconTypeBtns.forEach(b => b.classList.remove("active"));
@@ -73,7 +88,6 @@ faviconTypeBtns.forEach(btn => {
   });
 });
 
-// message font buttons
 messageFontBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     messageFontBtns.forEach(b => b.classList.remove("active"));
@@ -83,7 +97,6 @@ messageFontBtns.forEach(btn => {
   });
 });
 
-// message type buttons
 messageTypeBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     messageTypeBtns.forEach(b => b.classList.remove("active"));
@@ -93,7 +106,6 @@ messageTypeBtns.forEach(btn => {
   });
 });
 
-// wallpaper type buttons
 wallpaperTypeBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     wallpaperTypeBtns.forEach(b => b.classList.remove("active"));
@@ -103,7 +115,6 @@ wallpaperTypeBtns.forEach(btn => {
   });
 });
 
-// search engine buttons
 searchEngineBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     searchEngineBtns.forEach(b => b.classList.remove("active"));
@@ -153,8 +164,7 @@ wallpaperUpload.addEventListener("change", () => {
 });
 
 wallpaperReset.addEventListener("click", () => {
-  wallpaperBase64 = null;
-  wallpaperUpload.value = "";
+  wallpaperBase64 = null; wallpaperUpload.value = "";
   wallpaperFilename.textContent = "No file selected.";
   updateWallpaperPreview();
 });
@@ -174,15 +184,13 @@ faviconUpload.addEventListener("change", () => {
 });
 
 faviconReset.addEventListener("click", () => {
-  faviconBase64 = null;
-  faviconUpload.value = "";
+  faviconBase64 = null; faviconUpload.value = "";
   faviconFilename.textContent = "No file selected.";
   faviconPreviewImg.style.display = "none";
   faviconPreviewImg.src = "";
   faviconPreviewEmpty.style.display = "flex";
 });
 
-// bookmarks
 function renderBookmarks() {
   bookmarkList.innerHTML = "";
   if (bookmarks.length === 0) {
@@ -193,7 +201,6 @@ function renderBookmarks() {
     const domain = (() => { try { return new URL(bm.url).hostname; } catch { return null; } })();
     const item = document.createElement("div");
     item.className = "bookmark-item";
-
     if (domain) {
       const img = document.createElement("img");
       img.className = "bookmark-item-favicon";
@@ -212,26 +219,19 @@ function renderBookmarks() {
       fb.textContent = bm.name.charAt(0).toUpperCase();
       item.appendChild(fb);
     }
-
     const nameEl = document.createElement("span");
     nameEl.className = "bookmark-item-name";
     nameEl.textContent = bm.name;
     item.appendChild(nameEl);
-
     const urlEl = document.createElement("span");
     urlEl.className = "bookmark-item-url";
     urlEl.textContent = bm.url;
     item.appendChild(urlEl);
-
     const delBtn = document.createElement("button");
     delBtn.className = "bookmark-delete-btn";
     delBtn.textContent = "delete";
-    delBtn.addEventListener("click", () => {
-      bookmarks.splice(i, 1);
-      renderBookmarks();
-    });
+    delBtn.addEventListener("click", () => { bookmarks.splice(i, 1); renderBookmarks(); });
     item.appendChild(delBtn);
-
     bookmarkList.appendChild(item);
   });
 }
@@ -256,7 +256,9 @@ chrome.storage.sync.get([
   "wallpaperBrightness", "wallpaperBlur",
   "searchEnabled", "searchEngine", "searchPlaceholder", "searchRecognizeLinks",
   "searchBorderColor", "searchTextColor", "searchIconColor",
-  "bookmarks"
+  "bookmarks",
+  "animationsEnabled", "animInitialType", "animBookmarkTiming",
+  "animSearchType", "animBookmarkType"
 ], (result) => {
   if (result.username) usernameInput.value = result.username;
   if (result.tabTitle) tabTitleInput.value = result.tabTitle;
@@ -265,6 +267,7 @@ chrome.storage.sync.get([
   wallpaperEnabledToggle.checked = result.wallpaperEnabled !== false;
   searchEnabledToggle.checked = result.searchEnabled !== false;
   searchRecognizeLinksToggle.checked = result.searchRecognizeLinks !== false;
+  animEnabledToggle.checked = result.animationsEnabled !== false;
   if (result.messageTextColor) messageColorInput.value = result.messageTextColor;
   if (result.messageTextSize) messageSizeInput.value = result.messageTextSize;
   if (result.messageCustomText) messageCustomTextInput.value = result.messageCustomText;
@@ -301,6 +304,18 @@ chrome.storage.sync.get([
 
   selectedSearchEngine = result.searchEngine || "google";
   searchEngineBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedSearchEngine));
+
+  selectedAnimTiming = result.animBookmarkTiming || "left";
+  animTimingBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedAnimTiming));
+
+  selectedAnimInitial = result.animInitialType || "up-bouncy";
+  animInitialBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedAnimInitial));
+
+  selectedAnimSearch = result.animSearchType || "page-shrink";
+  animSearchBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedAnimSearch));
+
+  selectedAnimBookmark = result.animBookmarkType || "page-up";
+  animBookmarkBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.value === selectedAnimBookmark));
 
   chrome.storage.local.get(["faviconBase64", "wallpaperBase64"], (local) => {
     if (local.faviconBase64) {
@@ -347,6 +362,11 @@ document.querySelector(".btn-save").addEventListener("click", () => {
     searchTextColor: searchTextColorInput.value,
     searchIconColor: searchIconColorInput.value,
     bookmarks,
+    animationsEnabled: animEnabledToggle.checked,
+    animBookmarkTiming: selectedAnimTiming,
+    animInitialType: selectedAnimInitial,
+    animSearchType: selectedAnimSearch,
+    animBookmarkType: selectedAnimBookmark,
   }, () => {
     const saves = [];
     if (faviconBase64) saves.push(new Promise(res => chrome.storage.local.set({ faviconBase64 }, res)));

@@ -16,13 +16,21 @@ chrome.storage.sync.get([
   "wallpaperBrightness", "wallpaperBlur",
   "searchEnabled", "searchEngine", "searchPlaceholder", "searchRecognizeLinks",
   "searchBorderColor", "searchTextColor", "searchIconColor",
-  "bookmarks"
+  "bookmarks",
+  "animationsEnabled", "animInitialType", "animBookmarkTiming",
+  "animSearchType", "animBookmarkType"
 ], (result) => {
   const greetingEl = document.getElementById("greeting");
   const searchInput = document.getElementById("search");
   const searchWrapper = document.getElementById("search-wrapper");
   const bookmarksRow = document.getElementById("bookmarks-row");
   const root = document.documentElement;
+
+  const animEnabled = result.animationsEnabled !== false;
+  const initialType = result.animInitialType || "up-bouncy";
+  const bookmarkTiming = result.animBookmarkTiming || "left";
+  const searchAnimType = result.animSearchType || "page-shrink";
+  const bookmarkAnimType = result.animBookmarkType || "page-up";
 
   // search colors
   if (result.searchBorderColor) root.style.setProperty("--search-focus-color", result.searchBorderColor);
@@ -38,7 +46,6 @@ chrome.storage.sync.get([
     const filter = `brightness(${brightness}) blur(${blur}px)`;
     const bg = document.createElement("div");
     bg.style.cssText = `position:fixed;inset:0;z-index:-1;background-size:cover;background-position:center;filter:${filter};`;
-
     if (result.wallpaperType === "solid-color" && result.wallpaperColor) {
       let color = result.wallpaperColor.trim();
       if (!color.startsWith("#")) color = "#" + color;
@@ -66,20 +73,33 @@ chrome.storage.sync.get([
     }
   }
 
+  // apply initial animation to greeting + search
+  if (animEnabled) {
+    greetingEl.classList.add(`anim-${initialType}`);
+    searchWrapper.classList.add(`sanim-${searchAnimType}`);
+    searchWrapper.style.animationDelay = "0.1s";
+  }
+
   // bookmarks
   const bookmarks = result.bookmarks || [];
-  bookmarks.forEach((bm) => {
+  bookmarks.forEach((bm, i) => {
     const a = document.createElement("a");
     a.className = "bookmark-tile";
     a.href = bm.url;
     a.addEventListener("click", (e) => {
-      if (e.ctrlKey || e.metaKey || e.button === 1) {
-        e.preventDefault();
-        window.open(bm.url, "_blank");
-      }
+      if (e.ctrlKey || e.metaKey) { e.preventDefault(); window.open(bm.url, "_blank"); }
     });
 
-    // try to load favicon from google
+    // bookmark animation
+    if (animEnabled) {
+      a.classList.add(`banim-${bookmarkAnimType}`);
+      let delay = 0.2;
+      if (bookmarkTiming === "left") delay = 0.2 + i * 0.06;
+      else if (bookmarkTiming === "right") delay = 0.2 + (bookmarks.length - 1 - i) * 0.06;
+      else if (bookmarkTiming === "uniform") delay = 0.2;
+      a.style.animationDelay = `${delay}s`;
+    }
+
     const domain = (() => { try { return new URL(bm.url).hostname; } catch { return null; } })();
     if (domain) {
       const img = document.createElement("img");
